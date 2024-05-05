@@ -1,7 +1,7 @@
 # Misery.ai
 
 - Real-time communication between a React frontend and Node.js backend.
-- OSC message forwarding to SuperCollider or similar applications.
+- OSC message forwarding to SuperCollider.
 - Interactive UI for command input and response display.
 
 ## Installation

@@ -1,0 +1,11 @@
+node_modules/
+public
+.env
+git st
+
+# dependencies
+/node_modules
+.env
+
+# production
+/build
