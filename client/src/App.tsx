@@ -1,15 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from './components/Button';
+import OSC from 'osc-js';
 import './styles.css';
+
+const config = {
+    host: 'localhost',
+    port: 8080,
+    secure: false
+};
+
+const osc = new OSC({
+    plugin: new OSC.WebsocketClientPlugin(config)
+});
 
 interface APIResponse {
     choices: { message: { content: string } }[];
 }
 
-const App: React.FC = () => {
+interface Message {
+    role: 'user' | 'assistant';
+    content: string;
+}
+
+const App = () => {
+    const [conversation, setConversation] = useState<Message[]>([]);
     const [error, setError] = useState('');
     const [prompt, setPrompt] = useState('');
-    const [response, setResponse] = useState<APIResponse | null>(null);
+    const [response, setResponse] = useState<string | null>(null);
+
+    useEffect(() => {
+        osc.open();
+
+        return () => {
+            osc.close();
+        };
+    }, []);
 
     const sendPrompt = async (): Promise<void> => {
         const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
@@ -23,6 +48,12 @@ const App: React.FC = () => {
             return;
         }
 
+        const messages = conversation.map((c) => ({
+            role: c.role,
+            content: c.content
+        }));
+        messages.push({ role: 'user', content: prompt });
+
         try {
             const result = await fetch(url, {
                 method: 'POST',
@@ -31,7 +62,7 @@ const App: React.FC = () => {
                     Authorization: `Bearer ${apiKey}`
                 },
                 body: JSON.stringify({
-                    messages: [{ role: 'user', content: prompt }],
+                    messages: messages,
                     model: 'gpt-3.5-turbo'
                 })
             });
@@ -41,12 +72,39 @@ const App: React.FC = () => {
             }
 
             const data: APIResponse = await result.json();
-            setResponse(data);
+            const content = data.choices[0].message.content;
+            const newMessage: Message = {
+                role: 'assistant',
+                content: content
+            };
+            setConversation([
+                ...conversation,
+                { role: 'user', content: prompt },
+                newMessage
+            ]);
+            setResponse(content);
             setError(''); // Reset error if successful
+
+            if (content.toLowerCase().includes('play')) {
+                sendOscMessage('/play'); // Assuming 440 is a frequency
+            } else if (content.toLowerCase().includes('stop')) {
+                sendOscMessage('/stop'); // Assuming /stop is a valid command and 0 is a placeholder value
+            }
+            setPrompt('');
         } catch (error) {
             console.error('Error:', error);
             setError('Failed to fetch response.');
             setResponse(null); // Clear response if there's an error
+        }
+    };
+
+    const sendOscMessage = (command: string) => {
+        try {
+            const message = new OSC.Message(command);
+            osc.send(message);
+            console.log(`OSC message sent: ${command}`);
+        } catch (error) {
+            console.error('Failed to send OSC message:', error);
         }
     };
 
@@ -60,10 +118,8 @@ const App: React.FC = () => {
         <main className="h-screen bg-primary-bg">
             <div className="justify-betwee m-auto flex h-full w-full max-w-screen-lg flex-col">
                 <div className="flex flex-grow items-center justify-center p-4">
-                    {response && response.choices.length > 0 && (
-                        <p className="text-center text-white">
-                            {response.choices[0].message.content}
-                        </p>
+                    {response && (
+                        <p className="text-center text-white">{response}</p>
                     )}
                 </div>
                 <div className="m-auto w-full p-4">

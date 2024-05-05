@@ -1,0 +1,13 @@
+{
+  "name": "mmisery",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon ./server/server.js",
+    "client": "cd client && PORT=3001 npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.0"
+  }
+}
