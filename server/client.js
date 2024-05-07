@@ -1,25 +1,33 @@
 const WebSocket = require("ws")
+const OSC = require("osc-js")
 
-const ws = new WebSocket("ws://127.0.0.1:8080")
+const SERVER_URL = "ws://localhost:8080"
+let ws
 
-ws.on("open", function open() {
-  console.log("Connected to WebSocket server")
-  const message = JSON.stringify({
-    address: "/play",
-    args: [440], // Adjust the args to match the expected types in the server
+function connect() {
+  ws = new WebSocket(SERVER_URL)
+
+  ws.on("open", () => {
+    console.log("Connected to WebSocket server")
+
+    // Create an OSC message
+    const message = new OSC.Message("/play", 440)
+    ws.send(message.pack()) // Send the packed OSC message
   })
-  ws.send(message)
-  console.log("Message sent:", message)
-})
 
-ws.on("message", function incoming(data) {
-  console.log("Received from server:", data)
-})
+  ws.on("message", (data) => {
+    console.log("Received:", data)
+  })
 
-ws.on("close", function close() {
-  console.log("Disconnected from WebSocket server")
-})
+  ws.on("close", () => {
+    console.log("Disconnected from WebSocket server")
+    setTimeout(connect, 1000) // Reconnect after 1 second
+  })
 
-ws.on("error", function error(err) {
-  console.error("WebSocket error:", err)
-})
+  ws.on("error", (error) => {
+    console.error("WebSocket error:", error)
+    ws.close() // Close the current connection to clean up before reconnecting
+  })
+}
+
+connect()
