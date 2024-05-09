@@ -1,9 +1,13 @@
 import React from 'react';
 
 import { ReactComponent as ArrowRight } from '../assets/icons/arrow-right.svg';
+import { ReactComponent as ArrowUp } from '../assets/icons/arrow-up.svg';
+import { ReactComponent as Stop } from '../assets/icons/stop.svg';
 
 export const iconTypes = {
-    arrowRight: ArrowRight
+    arrowRight: ArrowRight,
+    arrowUp: ArrowUp,
+    stop: Stop
 };
 
 interface IconProps {
@@ -12,7 +16,7 @@ interface IconProps {
     onClick?: () => void;
 }
 
-const IconComponent: React.FC<IconProps> = ({ name, ...props }) => {
+const IconComponent = ({ name, ...props }: IconProps) => {
     const Icon = iconTypes[name];
     return <Icon {...props} />;
 };
