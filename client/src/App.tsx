@@ -3,6 +3,7 @@ import Button from './components/Button';
 import RenderContent from './components/RenderContent';
 import OSC from 'osc-js';
 import './styles.css';
+// import { initial, initial2 } from './mocks/initialPrompt';
 
 const config = {
     host: 'localhost',
@@ -18,7 +19,7 @@ interface APIResponse {
     choices: { message: { content: string } }[];
 }
 
-interface Message {
+export interface Message {
     role: 'user' | 'assistant';
     content: string;
 }
@@ -118,11 +119,11 @@ const App = () => {
     };
 
     return (
-        <main className="transition-width h-full overflow-auto bg-primary-bg">
+        <main className="transition-width h-full bg-primary-bg">
             <div className="m-auto flex h-full w-full flex-col justify-between">
                 <div className="h-full flex-grow justify-center overflow-hidden">
-                    <div className="h-full overflow-auto">
-                        <div className="prose lg:prose-xl m-auto flex h-full w-full max-w-screen-lg flex-col justify-center p-4 text-white">
+                    <div className="flex h-full justify-center overflow-auto">
+                        <div className="prose lg:prose-xl m-auto w-full max-w-screen-lg p-4 text-white">
                             {conversation.map((message, index) => (
                                 <RenderContent
                                     content={message.content}
@@ -133,7 +134,7 @@ const App = () => {
                     </div>
                 </div>
                 <div className="m-auto w-full max-w-screen-lg p-4">
-                    <div className="flex items-center rounded-xl border border-gray-700 p-2 text-xl">
+                    <div className="flex items-center rounded-xl border border-gray-500 p-2 text-xl">
                         <input
                             type="text"
                             value={prompt}
