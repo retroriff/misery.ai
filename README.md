@@ -25,10 +25,9 @@ cd ..
 
 ### Environment Variables
 
-Create `.env` files in your server and client directories:
+Create an `.env` file in your client directory:
 
-```plaintext
-# Client configuration
+```bash
 REACT_APP_OPENAI_API_URL=https://api.openai.com/v1/chat/completions
 REACT_APP_OPENAI_API_KEY=<YOUR_OPENAI_API_KEY>
 ```
