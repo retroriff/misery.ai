@@ -1,5 +1,5 @@
 {
-  "name": "mmisery",
+  "name": "misery",
   "version": "1.0.0",
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
