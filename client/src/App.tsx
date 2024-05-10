@@ -4,7 +4,7 @@ import RenderContent from './components/RenderContent';
 import { useOscMessages } from './composables/useOscMessages';
 import OSC from 'osc-js';
 import './styles.css';
-import { initialPrompt } from './mocks/initialPrompt';
+import { initialPrompt, shortPrompt } from './mocks/initialPrompt';
 
 const config = {
     host: 'localhost',
@@ -26,9 +26,7 @@ export interface Message {
 }
 
 const App = () => {
-    const [conversation, setConversation] = useState<Message[]>([
-        initialPrompt
-    ]);
+    const [conversation, setConversation] = useState<Message[]>([shortPrompt]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [prompt, setPrompt] = useState('');
@@ -111,8 +109,8 @@ const App = () => {
         <main className="transition-width h-full bg-primary-bg">
             <div className="m-auto flex h-full w-full flex-col justify-between">
                 <div className="h-full flex-grow justify-center overflow-hidden">
-                    <div className="scroll-container flex h-full justify-center overflow-y-scroll">
-                        <div className="prose m-auto w-full max-w-screen-lg p-4 text-white lg:prose-xl">
+                    <div className="scroll-container flex h-full justify-center overflow-y-scroll ">
+                        <div className="prose m-auto w-full max-w-screen-lg bg-red-300 p-4 text-white lg:prose-xl">
                             {conversation.map((message, index) => (
                                 <RenderContent
                                     content={message.content}

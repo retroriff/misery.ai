@@ -13,5 +13,6 @@ body,
 }
 
 .scroll-container {
-    scrollbar-color: #333 theme('colors.primary-bg');
+    /* scrollbar-color: #333 theme('colors.primary-bg'); */
+    scrollbar-color: #333 pink;
 }
