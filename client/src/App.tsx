@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Button from './components/Button';
 import RenderContent from './components/RenderContent';
+import { useOscMessages } from './composables/useOscMessages';
 import OSC from 'osc-js';
 import './styles.css';
-// import { initial, initial2 } from './mocks/initialPrompt';
+import { initialPrompt } from './mocks/initialPrompt';
 
 const config = {
     host: 'localhost',
@@ -25,10 +26,13 @@ export interface Message {
 }
 
 const App = () => {
-    const [conversation, setConversation] = useState<Message[]>([]);
+    const [conversation, setConversation] = useState<Message[]>([
+        initialPrompt
+    ]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [prompt, setPrompt] = useState('');
+    const { handleContent } = useOscMessages();
 
     useEffect(() => {
         osc.open();
@@ -87,29 +91,14 @@ const App = () => {
                 { role: 'user', content: prompt },
                 newMessage
             ]);
-            setError(''); // Reset error if successful
-
-            if (content.toLowerCase().includes('play')) {
-                sendOscMessage('/play');
-            } else if (content.toLowerCase().includes('stop')) {
-                sendOscMessage('/stop');
-            }
+            handleContent(content);
+            setError('');
             setPrompt('');
         } catch (error) {
             console.error('Error:', error);
             setError('Failed to fetch response.');
         }
         setIsLoading(false);
-    };
-
-    const sendOscMessage = (command: string) => {
-        try {
-            const message = new OSC.Message(command);
-            osc.send(message);
-            console.log(`OSC message sent: ${command}`);
-        } catch (error) {
-            console.error('Failed to send OSC message:', error);
-        }
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -122,8 +111,8 @@ const App = () => {
         <main className="transition-width h-full bg-primary-bg">
             <div className="m-auto flex h-full w-full flex-col justify-between">
                 <div className="h-full flex-grow justify-center overflow-hidden">
-                    <div className="flex h-full justify-center overflow-auto">
-                        <div className="prose lg:prose-xl m-auto w-full max-w-screen-lg p-4 text-white">
+                    <div className="scroll-container flex h-full justify-center overflow-y-scroll">
+                        <div className="prose m-auto w-full max-w-screen-lg p-4 text-white lg:prose-xl">
                             {conversation.map((message, index) => (
                                 <RenderContent
                                     content={message.content}

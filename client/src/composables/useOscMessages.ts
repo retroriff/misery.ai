@@ -17,6 +17,14 @@ export const useOscMessages = () => {
         return () => osc.close();
     }, []);
 
+    const handleContent = (content: string) => {
+        if (content.toLowerCase().includes('play')) {
+            sendOscMessage('/play');
+        } else if (content.toLowerCase().includes('stop')) {
+            sendOscMessage('/stop');
+        }
+    };
+
     const sendOscMessage = (command: string) => {
         try {
             const message = new OSC.Message(command);
@@ -27,5 +35,5 @@ export const useOscMessages = () => {
         }
     };
 
-    return { sendOscMessage };
+    return { sendOscMessage, handleContent };
 };

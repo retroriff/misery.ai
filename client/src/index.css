@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --bg-color: #f9f9f9;
+}
+
 html,
 body,
 #root {
     height: 100%;
+}
+
+.scroll-container {
+    scrollbar-color: #333 theme('colors.primary-bg');
 }

@@ -1,6 +1,6 @@
 import type { Message } from '~/App';
 
-export const initial: Message = {
+export const initialPrompt: Message = {
     role: 'user',
     content: `
     Hola!
@@ -12,22 +12,8 @@ export const initial: Message = {
     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
-\`\`\`js
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
-const test = 5
+\`\`\`SuperCollider
+TR08.preset(\electro, 2);
 \`\`\`
     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
@@ -57,7 +43,7 @@ const test = 5
     `.replace(/\n\s*/g, '\n')
 };
 
-export const initial2: Message = {
+export const shortPrompt: Message = {
     role: 'user',
     content: `
     Hola!
