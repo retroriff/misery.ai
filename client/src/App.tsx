@@ -1,21 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import Button from './components/Button';
-import RenderContent from './components/RenderContent';
+import React, { useEffect, useRef, useState } from 'react';
 import { useOscMessages } from './composables/useOscMessages';
-import OSC from 'osc-js';
-import './styles.css';
 import { initialPrompt, shortPrompt } from './mocks/initialPrompt';
+import './styles.css';
+
+import Button from './components/Button';
 import Icon from './components/Icon';
-
-const config = {
-    host: 'localhost',
-    port: 8080,
-    secure: false
-};
-
-const osc = new OSC({
-    plugin: new OSC.WebsocketClientPlugin(config)
-});
+import RenderContent from './components/RenderContent';
 
 interface APIResponse {
     choices: { message: { content: string } }[];
@@ -27,19 +17,23 @@ export interface Message {
 }
 
 const App = () => {
-    const [conversation, setConversation] = useState<Message[]>([shortPrompt]);
+    const [conversation, setConversation] = useState<Message[]>([
+        initialPrompt
+    ]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [prompt, setPrompt] = useState('');
     const { handleContent } = useOscMessages();
+    const conversationRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        osc.open();
+        if (conversationRef.current) {
+            conversationRef.current.scrollTop =
+                conversationRef.current.scrollHeight;
+        }
+    }, [conversation]);
 
-        return () => {
-            osc.close();
-        };
-    }, []);
+    // handleContent(initialPrompt.content);
 
     const sendPrompt = async (): Promise<void> => {
         setIsLoading(true);
@@ -49,6 +43,7 @@ const App = () => {
             role: c.role,
             content: c.content
         }));
+
         messages.push({ role: 'user', content: prompt });
 
         try {
@@ -85,6 +80,7 @@ const App = () => {
                 role: 'assistant',
                 content: content
             };
+
             setConversation([
                 ...conversation,
                 { role: 'user', content: prompt },
@@ -110,24 +106,28 @@ const App = () => {
         <main className="transition-width h-full bg-primary-bg">
             <div className="m-auto flex h-full w-full flex-col justify-between">
                 <div className="h-full flex-grow justify-center overflow-hidden">
-                    <div className="scroll-container flex h-full w-screen justify-center overflow-y-scroll pl-4">
+                    <div
+                        ref={conversationRef}
+                        className="conversation flex h-full w-screen justify-center overflow-y-scroll pl-4"
+                    >
                         <div className="prose lg:prose-xl m-auto max-w-screen-lg p-4 text-white">
                             {conversation.map((message, index) => (
-                                <div className="response flex gap-4">
+                                <div className="flex gap-4" key={index}>
                                     <div className="border-primary self-start rounded-full border p-2">
                                         <Icon name={message.role} size="md" />
                                     </div>
-                                    <RenderContent
-                                        content={message.content}
-                                        key={index}
-                                    />
+                                    <div className="response">
+                                        <RenderContent
+                                            content={message.content}
+                                        />
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </div>
                 <div className="m-auto w-full max-w-screen-lg p-4">
-                    <div className="flex items-center rounded-xl border border-gray-500 p-2 text-xl">
+                    <div className="flex items-center rounded-xl border border-gray-400 p-2 text-xl">
                         <input
                             type="text"
                             value={prompt}
