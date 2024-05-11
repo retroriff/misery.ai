@@ -5,6 +5,7 @@ import { useOscMessages } from './composables/useOscMessages';
 import OSC from 'osc-js';
 import './styles.css';
 import { initialPrompt, shortPrompt } from './mocks/initialPrompt';
+import Icon from './components/Icon';
 
 const config = {
     host: 'localhost',
@@ -109,13 +110,18 @@ const App = () => {
         <main className="transition-width h-full bg-primary-bg">
             <div className="m-auto flex h-full w-full flex-col justify-between">
                 <div className="h-full flex-grow justify-center overflow-hidden">
-                    <div className="scroll-container flex h-full justify-center overflow-y-scroll ">
-                        <div className="prose m-auto w-full max-w-screen-lg bg-red-300 p-4 text-white lg:prose-xl">
+                    <div className="scroll-container flex h-full w-screen justify-center overflow-y-scroll pl-4">
+                        <div className="prose lg:prose-xl m-auto max-w-screen-lg p-4 text-white">
                             {conversation.map((message, index) => (
-                                <RenderContent
-                                    content={message.content}
-                                    key={index}
-                                />
+                                <div className="response flex gap-4">
+                                    <div className="border-primary self-start rounded-full border p-2">
+                                        <Icon name={message.role} size="md" />
+                                    </div>
+                                    <RenderContent
+                                        content={message.content}
+                                        key={index}
+                                    />
+                                </div>
                             ))}
                         </div>
                     </div>
