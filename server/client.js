@@ -11,7 +11,9 @@ function connect() {
     console.log("Connected to WebSocket server")
 
     // Create an OSC message
-    const message = new OSC.Message("/play", 440)
+    // const message = new OSC.Message("/stop", 440)
+    const args = ["electro", 2]
+    const message = new OSC.Message("/tr08/preset", ...args)
     ws.send(message.pack()) // Send the packed OSC message
   })
 

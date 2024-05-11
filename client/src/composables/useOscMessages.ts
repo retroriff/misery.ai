@@ -11,6 +11,14 @@ const osc = new OSC({
     plugin: new OSC.WebsocketClientPlugin(config)
 });
 
+const sanitizeSymbolToString = (symbol: string): string => {
+    if (symbol.startsWith('\\')) {
+        return symbol.substring(1);
+    }
+
+    return symbol;
+};
+
 export const useOscMessages = () => {
     useEffect(() => {
         osc.open();
@@ -35,14 +43,18 @@ export const useOscMessages = () => {
 
             while ((tr08Match = tr08Regex.exec(codeBlock)) !== null) {
                 console.log('Extracted code:', tr08Match[0]);
+
                 // Check for 'preset' and extract parameters
                 const presetRegex = /preset\((\S+),\s*(\d+)\)/;
                 const presetMatch = tr08Match[0].match(presetRegex);
+
                 if (presetMatch) {
-                    const presetName = presetMatch[1];
+                    const presetName = sanitizeSymbolToString(presetMatch[1]);
                     const presetIndex = presetMatch[2];
+
                     console.log('Preset Name:', presetName);
                     console.log('Preset Index:', presetIndex);
+
                     sendOscMessage({
                         address: '/tr08/preset',
                         args: [presetName, presetIndex]

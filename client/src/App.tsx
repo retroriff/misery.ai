@@ -17,9 +17,7 @@ export interface Message {
 }
 
 const App = () => {
-    const [conversation, setConversation] = useState<Message[]>([
-        initialPrompt
-    ]);
+    const [conversation, setConversation] = useState<Message[]>([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [prompt, setPrompt] = useState('');
@@ -110,13 +108,13 @@ const App = () => {
                         ref={conversationRef}
                         className="conversation flex h-full w-screen justify-center overflow-y-scroll pl-4"
                     >
-                        <div className="prose lg:prose-xl m-auto max-w-screen-lg p-4 text-white">
+                        <div className="prose lg:prose-xl m-auto w-full max-w-screen-lg p-4 text-white">
                             {conversation.map((message, index) => (
                                 <div className="flex gap-4" key={index}>
                                     <div className="border-primary self-start rounded-full border p-2">
                                         <Icon name={message.role} size="md" />
                                     </div>
-                                    <div className="response">
+                                    <div className="response w-full">
                                         <RenderContent
                                             content={message.content}
                                         />
