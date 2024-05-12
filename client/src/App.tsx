@@ -82,7 +82,8 @@ const App = () => {
                 { role: 'user', content: prompt },
                 newMessage
             ]);
-            handleContent(content);
+            console.log('Response:', newMessage.content);
+            handleContent(newMessage.content);
             setError('');
             setPrompt('');
         } catch (error) {
@@ -141,8 +142,6 @@ const App = () => {
     return (
         <main className="transition-width h-full bg-primary-bg">
             <div className="m-auto flex h-full w-full flex-col justify-between">
-                <WaveAnimation isLoading={isLoading} />
-
                 <div className="h-full flex-grow justify-center overflow-hidden">
                     <div
                         ref={conversationRef}
@@ -151,15 +150,18 @@ const App = () => {
                         <MessageDisplay conversation={conversation} />
                     </div>
                 </div>
-                <div className="m-auto w-full max-w-screen-lg p-4">
-                    <ChatForm
-                        isLoading={isLoading}
-                        onKeyDown={handleKeyDown}
-                        onClick={handleClick}
-                        prompt={prompt}
-                        setPrompt={setPrompt}
-                    />
-                    {error && <p className="text-red-500">{error}</p>}
+                <div className="m-auto w-full p-4">
+                    <WaveAnimation isLoading={isLoading} />
+                    <div className="m-auto max-w-screen-lg">
+                        <ChatForm
+                            isLoading={isLoading}
+                            onKeyDown={handleKeyDown}
+                            onClick={handleClick}
+                            prompt={prompt}
+                            setPrompt={setPrompt}
+                        />
+                        {error && <p className="text-red-500">{error}</p>}
+                    </div>
                 </div>
             </div>
         </main>

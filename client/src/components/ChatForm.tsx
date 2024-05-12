@@ -42,7 +42,7 @@ const InputArea = ({
                 onChange={(e) => setPrompt(e.target.value)}
                 onKeyDown={handleKeyPress}
                 placeholder="Enter your prompt"
-                className="flex-grow bg-transparent p-2 text-white placeholder-gray-400 outline-none"
+                className="flex-grow bg-transparent p-2 text-white placeholder-gray-200 outline-none"
                 disabled={isLoading}
             />
             <Button

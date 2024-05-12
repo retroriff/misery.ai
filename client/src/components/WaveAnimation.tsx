@@ -5,11 +5,12 @@ type WaveAnimationProps = {
 };
 
 const WaveAnimation = ({ isLoading }: WaveAnimationProps) => {
-    const waveAnimationRef = useWaveAnimation(100, 5, isLoading);
+    const scale = isLoading ? 5 : 20;
+    const waveAnimationRef = useWaveAnimation(100, scale, true);
 
     return (
         <div id="wave-animation">
-            <canvas ref={waveAnimationRef}></canvas>
+            <canvas ref={waveAnimationRef} />
         </div>
     );
 };

@@ -84,6 +84,8 @@ export const useOscMessages = () => {
         const codeRegex = /```([^`]+)```/g;
         let match;
 
+        console.log('handeling content');
+
         while ((match = codeRegex.exec(content)) !== null) {
             handleTR08(match[1]);
         }
