@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useOscMessages } from './composables/useOscMessages';
-import { initialPrompt, shortPrompt } from './mocks/initialPrompt';
 import './styles.css';
 
 import Button from './components/Button';
 import Icon from './components/Icon';
 import RenderContent from './components/RenderContent';
+import WaveAnimation from './components/WaveAnimation';
 
 interface APIResponse {
     choices: { message: { content: string } }[];
@@ -25,13 +25,12 @@ const App = () => {
     const conversationRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // Automatically scroll conversation to the bottom
         if (conversationRef.current) {
             conversationRef.current.scrollTop =
                 conversationRef.current.scrollHeight;
         }
     }, [conversation]);
-
-    // handleContent(initialPrompt.content);
 
     const sendPrompt = async (): Promise<void> => {
         setIsLoading(true);
@@ -95,14 +94,37 @@ const App = () => {
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && prompt.trim()) {
             sendPrompt();
+        } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            event.preventDefault(); // Prevent the default action to keep the focus in the input field
+            const userMessages = conversation
+                .filter((msg) => msg.role === 'user')
+                .map((msg) => msg.content);
+            const currentIndex = userMessages.indexOf(prompt);
+
+            if (event.key === 'ArrowUp') {
+                const newIndex = currentIndex + 1;
+                if (newIndex < userMessages.length) {
+                    setPrompt(userMessages[newIndex]);
+                }
+            } else if (event.key === 'ArrowDown') {
+                const newIndex = currentIndex - 1;
+                if (newIndex >= 0) {
+                    setPrompt(userMessages[newIndex]);
+                } else {
+                    // Clear the prompt if below zero index
+                    setPrompt('');
+                }
+            }
         }
     };
 
     return (
         <main className="transition-width h-full bg-primary-bg">
             <div className="m-auto flex h-full w-full flex-col justify-between">
+                <WaveAnimation isLoading={isLoading} />
+
                 <div className="h-full flex-grow justify-center overflow-hidden">
                     <div
                         ref={conversationRef}

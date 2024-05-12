@@ -44,16 +44,6 @@ const test = 5
 };
 
 export const shortPrompt: Message = {
-    role: 'user',
-    content: `
-    Hola!
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore illo ab?
-`
+    role: 'assistant',
+    content: 'Hello, stupid human. How can I help you?'
 };
