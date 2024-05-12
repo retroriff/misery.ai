@@ -81,12 +81,6 @@ export const useOscMessages = () => {
     }, []);
 
     const handleContent = (content: string) => {
-        if (content.toLowerCase().includes('play')) {
-            sendOscMessage({ address: '/play' });
-        } else if (content.toLowerCase().includes('stop')) {
-            sendOscMessage({ address: '/stop' });
-        }
-
         const codeRegex = /```([^`]+)```/g;
         let match;
 
