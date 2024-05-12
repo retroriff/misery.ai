@@ -1,23 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
+import type { Message } from '~/types';
 import { useOscMessages } from './composables/useOscMessages';
+import { initialPrompt, shortPrompt } from './mocks/initialPrompt';
 import './styles.css';
 
-import Button from './components/Button';
-import Icon from './components/Icon';
-import RenderContent from './components/RenderContent';
+import ChatForm from './components/ChatForm';
+import MessageDisplay from './components/MessageDisplay';
 import WaveAnimation from './components/WaveAnimation';
 
 interface APIResponse {
     choices: { message: { content: string } }[];
 }
 
-export interface Message {
-    role: 'user' | 'assistant';
-    content: string;
-}
-
 const App = () => {
-    const [conversation, setConversation] = useState<Message[]>([]);
+    const [conversation, setConversation] = useState<Message[]>([shortPrompt]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [prompt, setPrompt] = useState('');
@@ -25,7 +21,6 @@ const App = () => {
     const conversationRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // Automatically scroll conversation to the bottom
         if (conversationRef.current) {
             conversationRef.current.scrollTop =
                 conversationRef.current.scrollHeight;
@@ -36,10 +31,14 @@ const App = () => {
         setIsLoading(true);
         setError('');
 
-        const messages = conversation.map((c) => ({
-            role: c.role,
-            content: c.content
-        }));
+        const messages = [initialPrompt];
+
+        messages.push(
+            ...conversation.map((c) => ({
+                role: c.role,
+                content: c.content
+            }))
+        );
 
         messages.push({ role: 'user', content: prompt });
 
@@ -96,27 +95,46 @@ const App = () => {
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter' && prompt.trim()) {
             sendPrompt();
-        } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-            event.preventDefault(); // Prevent the default action to keep the focus in the input field
-            const userMessages = conversation
-                .filter((msg) => msg.role === 'user')
-                .map((msg) => msg.content);
-            const currentIndex = userMessages.indexOf(prompt);
+            return;
+        }
 
-            if (event.key === 'ArrowUp') {
-                const newIndex = currentIndex + 1;
-                if (newIndex < userMessages.length) {
-                    setPrompt(userMessages[newIndex]);
-                }
-            } else if (event.key === 'ArrowDown') {
-                const newIndex = currentIndex - 1;
-                if (newIndex >= 0) {
-                    setPrompt(userMessages[newIndex]);
-                } else {
-                    // Clear the prompt if below zero index
-                    setPrompt('');
-                }
+        if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
+            return;
+        }
+
+        event.preventDefault();
+
+        const userMessages = conversation
+            .filter((msg) => msg.role === 'user')
+            .map((msg) => msg.content);
+
+        const currentIndex = userMessages.lastIndexOf(prompt);
+
+        if (event.key === 'ArrowUp') {
+            const newIndex = currentIndex - 1;
+            if (newIndex >= 0) {
+                setPrompt(userMessages[newIndex]);
+                return;
             }
+
+            setPrompt(userMessages[userMessages.length - 1]);
+            return;
+        }
+
+        if (event.key === 'ArrowDown') {
+            const newIndex = currentIndex + 1;
+            if (newIndex < userMessages.length) {
+                setPrompt(userMessages[newIndex]);
+                return;
+            }
+
+            setPrompt('');
+        }
+    };
+
+    const handleClick = () => {
+        if (prompt.trim()) {
+            sendPrompt(); // Trigger sending the prompt
         }
     };
 
@@ -130,41 +148,17 @@ const App = () => {
                         ref={conversationRef}
                         className="conversation flex h-full w-screen justify-center overflow-y-scroll pl-4"
                     >
-                        <div className="prose lg:prose-xl m-auto w-full max-w-screen-lg p-4 text-white">
-                            {conversation.map((message, index) => (
-                                <div className="flex gap-4" key={index}>
-                                    <div className="border-primary self-start rounded-full border p-2">
-                                        <Icon name={message.role} size="md" />
-                                    </div>
-                                    <div className="response w-full">
-                                        <RenderContent
-                                            content={message.content}
-                                        />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        <MessageDisplay conversation={conversation} />
                     </div>
                 </div>
                 <div className="m-auto w-full max-w-screen-lg p-4">
-                    <div className="flex items-center rounded-xl border border-gray-400 p-2 text-xl">
-                        <input
-                            type="text"
-                            value={prompt}
-                            onChange={(e) => setPrompt(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Enter your prompt"
-                            className="flex-grow bg-transparent p-2 text-white placeholder-gray-400 outline-none"
-                        />
-                        <Button
-                            hideText={true}
-                            icon="arrowUp"
-                            isLoading={isLoading}
-                            onClick={sendPrompt}
-                        >
-                            Send
-                        </Button>
-                    </div>
+                    <ChatForm
+                        isLoading={isLoading}
+                        onKeyDown={handleKeyDown}
+                        onClick={handleClick}
+                        prompt={prompt}
+                        setPrompt={setPrompt}
+                    />
                     {error && <p className="text-red-500">{error}</p>}
                 </div>
             </div>
