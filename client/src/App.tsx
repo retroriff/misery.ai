@@ -154,7 +154,10 @@ const App = () => {
                     </div>
                 </div>
                 <div className="m-auto w-full p-4">
-                    <WaveAnimation isLoading={isLoading} />
+                    <WaveAnimation
+                        isLoading={isLoading}
+                        shouldAnimate={conversation.length > 1}
+                    />
                     <div className="m-auto max-w-screen-lg">
                         <ChatForm
                             isLoading={isLoading}
