@@ -10,7 +10,10 @@ const WaveAnimation = ({ isLoading }: WaveAnimationProps) => {
 
     return (
         <div id="wave-animation">
-            <canvas ref={waveAnimationRef} />
+            <canvas ref={waveAnimationRef}>
+                A wave animation that changes behaviour while we are loading a
+                new response
+            </canvas>
         </div>
     );
 };
