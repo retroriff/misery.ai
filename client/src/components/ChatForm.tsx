@@ -21,10 +21,8 @@ const InputArea = ({
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             event.preventDefault();
-            onClick();
+            onKeyDown(event);
         }
-
-        onKeyDown(event);
     };
 
     useEffect(() => {
@@ -34,7 +32,7 @@ const InputArea = ({
     }, [isLoading]);
 
     return (
-        <div className="flex items-center rounded-xl border border-gray-400 p-2 text-xl">
+        <div className="flex items-center rounded-xl border border-gray-200 p-2 text-xl">
             <input
                 ref={inputRef}
                 type="text"
@@ -42,7 +40,7 @@ const InputArea = ({
                 onChange={(e) => setPrompt(e.target.value)}
                 onKeyDown={handleKeyPress}
                 placeholder="Enter your prompt"
-                className="flex-grow bg-transparent p-2 text-white placeholder-gray-200 outline-none"
+                className="flex-grow bg-transparent p-2 text-white placeholder-gray-500 outline-none"
                 disabled={isLoading}
             />
             <Button

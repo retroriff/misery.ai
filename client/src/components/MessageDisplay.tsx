@@ -15,7 +15,7 @@ const MessageDisplay = ({ conversation }: MessageDisplayProps) => (
                 >
                     <Icon name={message.role} size="md" />
                 </div>
-                <div className="response w-full">
+                <div className="response mt-[2px] w-full">
                     <RenderContent content={message.content} />
                 </div>
             </div>

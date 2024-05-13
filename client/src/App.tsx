@@ -28,6 +28,11 @@ const App = () => {
     }, [conversation]);
 
     const sendPrompt = async (): Promise<void> => {
+        const userMessage = { role: 'user', content: prompt } as Message;
+        setConversation((prevConversation) => [
+            ...prevConversation,
+            userMessage
+        ]);
         setIsLoading(true);
         setError('');
 
@@ -77,12 +82,10 @@ const App = () => {
                 content: content
             };
 
-            setConversation([
-                ...conversation,
-                { role: 'user', content: prompt },
+            setConversation((prevConversation) => [
+                ...prevConversation,
                 newMessage
             ]);
-            console.log('Response:', newMessage.content);
             handleContent(newMessage.content);
             setError('');
             setPrompt('');
@@ -135,7 +138,7 @@ const App = () => {
 
     const handleClick = () => {
         if (prompt.trim()) {
-            sendPrompt(); // Trigger sending the prompt
+            sendPrompt();
         }
     };
 

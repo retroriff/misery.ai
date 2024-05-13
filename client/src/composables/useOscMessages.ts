@@ -25,7 +25,7 @@ const handleTR08 = (codeBlock: string) => {
 
     while ((tr08Match = tr08Regex.exec(codeBlock)) !== null) {
         const action = tr08Match[1]; // This captures everything after TR08.
-        console.log('Extracted TR08 command:', action);
+        console.log('🧲 Extracted TR08 command:', action);
 
         if (action.startsWith('preset')) {
             return handlePresets(tr08Match[0]);
@@ -46,9 +46,6 @@ const handlePresets = (code: string) => {
         const presetName = sanitizeSymbolToString(presetMatch[1]);
         const presetIndex = presetMatch[2];
 
-        console.log('Preset Name:', presetName);
-        console.log('Preset Index:', presetIndex);
-
         sendOscMessage({
             address: '/tr08/preset',
             args: [presetName, presetIndex]
@@ -67,7 +64,7 @@ const sendOscMessage = (message: Message) => {
     try {
         const message = new OSC.Message(address, ...args);
         osc.send(message);
-        console.log(`OSC message sent: ${address}`);
+        console.log(`🚀 OSC message sent: ${address}`);
     } catch (error) {
         console.error('Failed to send OSC message:', error);
     }
@@ -83,8 +80,6 @@ export const useOscMessages = () => {
     const handleContent = (content: string) => {
         const codeRegex = /```([^`]+)```/g;
         let match;
-
-        console.log('handeling content');
 
         while ((match = codeRegex.exec(content)) !== null) {
             handleTR08(match[1]);
