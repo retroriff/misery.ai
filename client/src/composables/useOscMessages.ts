@@ -11,46 +11,19 @@ const osc = new OSC({
     plugin: new OSC.WebsocketClientPlugin(config)
 });
 
-const sanitizeSymbolToString = (symbol: string): string => {
-    if (symbol.startsWith('\\')) {
-        return symbol.substring(1);
-    }
-    return symbol;
-};
+const handleCode = (codeBlock: string) => {
+    const validClasses = /^\s*(TR08|NS)/;
+    const hasValidClasses = validClasses.test(codeBlock);
 
-const handleTR08 = (codeBlock: string) => {
-    // This regex now captures the entire TR08 command including play and stop
-    const tr08Regex = /TR08\.([^;]*);/g;
-    let tr08Match;
-
-    while ((tr08Match = tr08Regex.exec(codeBlock)) !== null) {
-        const action = tr08Match[1]; // This captures everything after TR08.
-        console.log('🧲 Extracted TR08 command:', action);
-
-        if (action.startsWith('preset')) {
-            return handlePresets(tr08Match[0]);
-        }
-
+    if (hasValidClasses) {
+        // const sanitizedCode = codeBlock.replace(/\\/g, '\\\\');
         return sendOscMessage({
-            address: '/tr08',
-            args: [action]
+            address: '/px',
+            args: [codeBlock]
         });
     }
-};
 
-const handlePresets = (code: string) => {
-    const presetRegex = /preset\((\S+),\s*(\d+)\)/;
-    const presetMatch = code.match(presetRegex);
-
-    if (presetMatch) {
-        const presetName = sanitizeSymbolToString(presetMatch[1]);
-        const presetIndex = presetMatch[2];
-
-        sendOscMessage({
-            address: '/tr08/preset',
-            args: [presetName, presetIndex]
-        });
-    }
+    console.log('😬 Code does not contain Px valid classes');
 };
 
 type Message = {
@@ -78,11 +51,12 @@ export const useOscMessages = () => {
     }, []);
 
     const handleContent = (content: string) => {
-        const codeRegex = /```([^`]+)```/g;
+        // console.log('👀 Handling content:', content);
+        const codeRegex = /```([\s\S]+?)```/g;
         let match;
 
         while ((match = codeRegex.exec(content)) !== null) {
-            handleTR08(match[1]);
+            handleCode(match[1]);
         }
     };
 
