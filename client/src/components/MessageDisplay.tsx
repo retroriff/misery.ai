@@ -7,7 +7,7 @@ type MessageDisplayProps = {
 };
 
 const MessageDisplay = ({ conversation }: MessageDisplayProps) => (
-    <div className="prose lg:prose-xl m-auto w-full max-w-screen-lg p-4 text-white">
+    <div className="prose m-auto w-full max-w-screen-lg p-4 text-white lg:prose-xl">
         {conversation.map((message, index) => (
             <div className="flex gap-4" key={index}>
                 <div
@@ -15,7 +15,7 @@ const MessageDisplay = ({ conversation }: MessageDisplayProps) => (
                 >
                     <Icon name={message.role} size="md" />
                 </div>
-                <div className="response mt-[2px] w-full">
+                <div className="response mt-[1px] w-full">
                     <RenderContent content={message.content} />
                 </div>
             </div>
