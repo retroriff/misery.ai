@@ -19,6 +19,7 @@ const App = () => {
     const [prompt, setPrompt] = useState('');
     const { handleContent } = useOscMessages();
     const conversationRef = useRef<HTMLDivElement>(null);
+    const [hush, setHush] = useState(false);
 
     useEffect(() => {
         if (conversationRef.current) {
@@ -35,6 +36,11 @@ const App = () => {
         ]);
         setIsLoading(true);
         setError('');
+
+        console.log('userMessage.content', userMessage.content);
+        if (userMessage.content === 'Hush') {
+            setHush(true);
+        }
 
         const messages = [initialPrompt];
 
@@ -142,6 +148,8 @@ const App = () => {
         }
     };
 
+    const shouldAnimate = conversation.length > 1 && !hush;
+
     return (
         <main className="transition-width h-full bg-primary-bg">
             <div className="m-auto flex h-full w-full flex-col justify-between">
@@ -156,7 +164,7 @@ const App = () => {
                 <div className="m-auto w-full p-4">
                     <WaveAnimation
                         isLoading={isLoading}
-                        shouldAnimate={conversation.length > 1}
+                        shouldAnimate={shouldAnimate}
                     />
                     <div className="m-auto max-w-screen-lg">
                         <ChatForm
