@@ -12,7 +12,7 @@ const osc = new OSC({
 });
 
 const handleCode = (codeBlock: string) => {
-    const validClasses = /^\s*(TR08|Ns)/;
+    const validClasses = /^\s*(Ns|Px|TR08)/;
     const hasValidClasses = validClasses.test(codeBlock);
 
     if (hasValidClasses) {
