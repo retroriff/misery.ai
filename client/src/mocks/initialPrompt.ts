@@ -83,5 +83,5 @@ And we can fade out all playing instruments with \`Px.release(name: \\all);\`.
 
 export const shortPrompt: Message = {
     role: 'assistant',
-    content: 'Hello, stupid human. How can I help you?'
+    content: 'Hello, mere mortal. How can I help you?'
 };
