@@ -9,6 +9,12 @@ type ChatFormProps = {
     onClick: () => void;
 };
 
+export enum ControlKeys {
+    ArrowDown = 'ArrowDown',
+    ArrowUp = 'ArrowUp',
+    At = '@',
+    Enter = 'Enter'
+}
 const InputArea = ({
     prompt,
     setPrompt,
@@ -18,8 +24,12 @@ const InputArea = ({
 }: ChatFormProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
+    const isControlKey = (key: string): key is ControlKeys => {
+        return Object.values(ControlKeys).includes(key as ControlKeys);
+    };
+
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (['ArrowDown', 'ArrowUp', 'Enter', '@'].includes(event.key)) {
+        if (isControlKey(event.key)) {
             event.preventDefault();
             onKeyDown(event);
         }

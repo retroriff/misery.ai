@@ -3,6 +3,7 @@ import type { Message } from '~/types';
 // import { playSineWave } from './composables/useWebAudioApi';
 import { useOscMessages } from './composables/useOscMessages';
 import { initialPrompt, shortPrompt } from './mocks/initialPrompt';
+import { ControlKeys } from './components/ChatForm';
 import './styles.css';
 
 import ChatForm from './components/ChatForm';
@@ -16,20 +17,24 @@ interface APIResponse {
 
 const App = () => {
     const [conversation, setConversation] = useState<Message[]>([shortPrompt]);
-    const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [prompt, setPrompt] = useState('');
-    const { handleContent } = useOscMessages();
     const conversationRef = useRef<HTMLDivElement>(null);
+    const [error, setError] = useState('');
+    const { handleContent } = useOscMessages();
     const [hush, setHush] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [messageIndex, setMessageIndex] = useState(-1);
+    const [prompt, setPrompt] = useState('');
     const [showReevaluateBadge, setShowReevaluateBadge] = useState(false);
 
-    useEffect(() => {
+    const scrollToBottom = () => {
         if (conversationRef.current) {
             conversationRef.current.scrollTop =
                 conversationRef.current.scrollHeight;
         }
+    };
+
+    useEffect(() => {
+        scrollToBottom();
     }, [conversation]);
 
     const sendPrompt = async (): Promise<void> => {
@@ -119,16 +124,20 @@ const App = () => {
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter' && prompt.trim()) {
+        if (event.key === ControlKeys.Enter && prompt.trim()) {
             sendPrompt();
             return;
         }
 
-        if (event.key === '@') {
+        if (event.key === ControlKeys.At) {
             reevaluateCode();
         }
 
-        if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
+        if (
+            ![ControlKeys.ArrowDown, ControlKeys.ArrowUp].includes(
+                event.key as ControlKeys
+            )
+        ) {
             return;
         }
 
@@ -138,11 +147,11 @@ const App = () => {
 
         let newIndex = messageIndex;
 
-        if (event.key === 'ArrowUp') {
+        if (event.key === ControlKeys.ArrowUp) {
             newIndex = newIndex <= 0 ? userMessages.length - 1 : newIndex - 1;
         }
 
-        if (event.key === 'ArrowDown') {
+        if (event.key === ControlKeys.ArrowDown) {
             newIndex = newIndex >= userMessages.length - 1 ? -1 : newIndex + 1;
         }
 

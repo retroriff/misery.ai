@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from './Icon'; // Import the Icon component
+import Icon from './Icon';
 import { iconTypes } from './Icon';
 
 interface ButtonProps {
