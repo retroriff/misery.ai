@@ -19,7 +19,7 @@ const InputArea = ({
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
+        if (['ArrowDown', 'ArrowUp', 'Enter', '@'].includes(event.key)) {
             event.preventDefault();
             onKeyDown(event);
         }

@@ -8,6 +8,7 @@ import './styles.css';
 import ChatForm from './components/ChatForm';
 import MessageDisplay from './components/MessageDisplay';
 import WaveAnimation from './components/WaveAnimation';
+import ReevaluateBadge from './components/ReevaluateBadge';
 
 interface APIResponse {
     choices: { message: { content: string } }[];
@@ -21,6 +22,8 @@ const App = () => {
     const { handleContent } = useOscMessages();
     const conversationRef = useRef<HTMLDivElement>(null);
     const [hush, setHush] = useState(false);
+    const [messageIndex, setMessageIndex] = useState(-1);
+    const [showReevaluateBadge, setShowReevaluateBadge] = useState(false);
 
     useEffect(() => {
         if (conversationRef.current) {
@@ -39,7 +42,6 @@ const App = () => {
         setIsLoading(true);
         setError('');
 
-        console.log('userMessage.content', userMessage.content);
         if (userMessage.content === 'Hush') {
             setHush(true);
         }
@@ -102,6 +104,18 @@ const App = () => {
             setError('Failed to fetch response.');
         }
         setIsLoading(false);
+        setMessageIndex(-1); // Reset index after sending prompt
+    };
+
+    const reevaluateCode = () => {
+        const reevaluateCode = conversation[conversation.length - 1].content;
+        console.log('🔄 Reevaluate', reevaluateCode);
+        handleContent(reevaluateCode);
+
+        setShowReevaluateBadge(true);
+        setTimeout(() => {
+            setShowReevaluateBadge(false);
+        }, 500);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -110,38 +124,30 @@ const App = () => {
             return;
         }
 
+        if (event.key === '@') {
+            reevaluateCode();
+        }
+
         if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
             return;
         }
-
-        event.preventDefault();
 
         const userMessages = conversation
             .filter((msg) => msg.role === 'user')
             .map((msg) => msg.content);
 
-        const currentIndex = userMessages.lastIndexOf(prompt);
+        let newIndex = messageIndex;
 
         if (event.key === 'ArrowUp') {
-            const newIndex = currentIndex - 1;
-            if (newIndex >= 0) {
-                setPrompt(userMessages[newIndex]);
-                return;
-            }
-
-            setPrompt(userMessages[userMessages.length - 1]);
-            return;
+            newIndex = newIndex <= 0 ? userMessages.length - 1 : newIndex - 1;
         }
 
         if (event.key === 'ArrowDown') {
-            const newIndex = currentIndex + 1;
-            if (newIndex < userMessages.length) {
-                setPrompt(userMessages[newIndex]);
-                return;
-            }
-
-            setPrompt('');
+            newIndex = newIndex >= userMessages.length - 1 ? -1 : newIndex + 1;
         }
+
+        setMessageIndex(newIndex);
+        setPrompt(newIndex === -1 ? '' : userMessages[newIndex]);
     };
 
     const handleClick = () => {
@@ -177,6 +183,7 @@ const App = () => {
                             setPrompt={setPrompt}
                         />
                         {error && <p className="text-red-500">{error}</p>}
+                        <ReevaluateBadge show={showReevaluateBadge} />
                     </div>
                 </div>
             </div>
