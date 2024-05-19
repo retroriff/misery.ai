@@ -1,6 +1,7 @@
 import { ReactComponent as ArrowRight } from '../assets/icons/arrow-right.svg';
 import { ReactComponent as ArrowUp } from '../assets/icons/arrow-up.svg';
 import { ReactComponent as Assistant } from '../assets/icons/assistant.svg';
+import { ReactComponent as Recycle } from '../assets/icons/recycle.svg';
 import { ReactComponent as Stop } from '../assets/icons/stop.svg';
 import { ReactComponent as User } from '../assets/icons/user.svg';
 
@@ -8,8 +9,9 @@ export const iconTypes = {
     arrowRight: ArrowRight,
     arrowUp: ArrowUp,
     assistant: Assistant,
-    user: User,
-    stop: Stop
+    recycle: Recycle,
+    stop: Stop,
+    user: User
 };
 
 interface IconProps {
