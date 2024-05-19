@@ -43,3 +43,8 @@ npm start
 ```
 
 This command will start the server on port 3000 and the React development server on port 3001.
+
+## Control Keys
+
+- **Up and down arrow keys**: Navigate through the history of user-sent messages. Use the Up arrow key to browse previous messages and the Down arrow key to browse next messages.
+- **@**: Trigger a reevaluation of the last piece of code provided by the assistant. This can be useful for quickly rechecking or updating the last response without retyping.
