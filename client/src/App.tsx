@@ -1,23 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import type { Message } from '~/types';
 // import { playSineWave } from './composables/useWebAudioApi';
+
+// src/App.tsx
+import React, { useEffect, useRef, useState } from 'react';
+import { useAi } from './composables/useAi';
 import { useOscMessages } from './composables/useOscMessages';
-import { initialPrompt, shortPrompt } from './mocks/initialPrompt';
 import './styles.css';
 
 import ChatForm from './components/ChatForm';
 import MessageDisplay from './components/MessageDisplay';
 import WaveAnimation from './components/WaveAnimation';
 
-interface APIResponse {
-    choices: { message: { content: string } }[];
-}
-
-const App = () => {
-    const [conversation, setConversation] = useState<Message[]>([shortPrompt]);
-    const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [prompt, setPrompt] = useState('');
+const App: React.FC = () => {
+    const { conversation, error, isLoading, prompt, setPrompt, sendPrompt } =
+        useAi();
     const { handleContent } = useOscMessages();
     const conversationRef = useRef<HTMLDivElement>(null);
     const [hush, setHush] = useState(false);
@@ -29,80 +24,24 @@ const App = () => {
         }
     }, [conversation]);
 
-    const sendPrompt = async (): Promise<void> => {
-        // playSineWave(); // Web Audio API experiment
-        const userMessage = { role: 'user', content: prompt } as Message;
-        setConversation((prevConversation) => [
-            ...prevConversation,
-            userMessage
-        ]);
-        setIsLoading(true);
-        setError('');
+    useEffect(() => {
+        const lastMessage = conversation[conversation.length - 1];
+        if (lastMessage && lastMessage.role === 'assistant') {
+            handleContent(lastMessage.content);
+        }
+    }, [conversation, handleContent]);
 
-        console.log('userMessage.content', userMessage.content);
-        if (userMessage.content === 'Hush') {
+    useEffect(() => {
+        const lastUserMessage = conversation
+            .slice()
+            .reverse()
+            .find((msg) => msg.role === 'user');
+        if (lastUserMessage?.content === 'Hush') {
             setHush(true);
+        } else {
+            setHush(false);
         }
-
-        const messages = [initialPrompt];
-
-        messages.push(
-            ...conversation.map((c) => ({
-                role: c.role,
-                content: c.content
-            }))
-        );
-
-        messages.push({ role: 'user', content: prompt });
-
-        try {
-            const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-            const url = process.env.REACT_APP_OPENAI_API_URL;
-
-            if (!url || !apiKey) {
-                console.error(
-                    'API URL or API Key is not defined in the environment variables.'
-                );
-                setError('API configuration error.');
-                return;
-            }
-
-            const result = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    messages: messages,
-                    model: 'gpt-4o'
-                })
-            });
-
-            if (!result.ok) {
-                throw new Error(`Failed to fetch API: ${result.status}`);
-            }
-
-            const data: APIResponse = await result.json();
-            const content = data.choices[0].message.content;
-            const newMessage: Message = {
-                role: 'assistant',
-                content: content
-            };
-
-            setConversation((prevConversation) => [
-                ...prevConversation,
-                newMessage
-            ]);
-            handleContent(newMessage.content);
-            setError('');
-            setPrompt('');
-        } catch (error) {
-            console.error('Error:', error);
-            setError('Failed to fetch response.');
-        }
-        setIsLoading(false);
-    };
+    }, [conversation]);
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter' && prompt.trim()) {
@@ -119,7 +58,6 @@ const App = () => {
         const userMessages = conversation
             .filter((msg) => msg.role === 'user')
             .map((msg) => msg.content);
-
         const currentIndex = userMessages.lastIndexOf(prompt);
 
         if (event.key === 'ArrowUp') {
