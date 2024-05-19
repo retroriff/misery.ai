@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { Message } from '~/types';
+// import { playSineWave } from './composables/useWebAudioApi';
 import { useOscMessages } from './composables/useOscMessages';
 import { initialPrompt, shortPrompt } from './mocks/initialPrompt';
 import './styles.css';
@@ -29,6 +30,7 @@ const App = () => {
     }, [conversation]);
 
     const sendPrompt = async (): Promise<void> => {
+        // playSineWave(); // Web Audio API experiment
         const userMessage = { role: 'user', content: prompt } as Message;
         setConversation((prevConversation) => [
             ...prevConversation,
