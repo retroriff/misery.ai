@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { Message } from '~/types';
 // import { playSineWave } from './composables/useWebAudioApi';
 import { useOscMessages } from './composables/useOscMessages';
-import { initialPrompt, shortPrompt } from './mocks/initialPrompt';
+import { aIInstructions, initialPrompt } from './mocks/initialPrompt';
 import { ControlKeys } from './components/ChatForm';
 import './styles.css';
 
@@ -16,7 +16,9 @@ interface APIResponse {
 }
 
 const App = () => {
-    const [conversation, setConversation] = useState<Message[]>([shortPrompt]);
+    const [conversation, setConversation] = useState<Message[]>([
+        initialPrompt
+    ]);
     const conversationRef = useRef<HTMLDivElement>(null);
     const [error, setError] = useState('');
     const { handleContent } = useOscMessages();
@@ -51,7 +53,7 @@ const App = () => {
             setHush(true);
         }
 
-        const messages = [initialPrompt];
+        const messages = [aIInstructions];
 
         messages.push(
             ...conversation.map((c) => ({

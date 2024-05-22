@@ -1,6 +1,6 @@
 import type { Message } from '~/types';
 
-export const initialPrompt: Message = {
+export const aIInstructions: Message = {
     role: 'user',
     content: `
  Generates OSC messages to control SuperCollider in real-time for live coding performances. This specialized ChatGPT is able to understand natural language instructions related to music composition and generate corresponding OSC messages to trigger sound events, control parameters, and manipulate audio synthesis processes in SuperCollider.
@@ -82,7 +82,7 @@ And we can fade out all playing instruments with \`Px.release(name: \\all);\`.
 `.replace(/\n\s*/g, '\n')
 };
 
-export const shortPrompt: Message = {
+export const initialPrompt: Message = {
     role: 'assistant',
     content: 'Hello, mere mortal. How can I help you?'
 };
