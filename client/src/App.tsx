@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { Message } from '~/types';
-// import { playSineWave } from './composables/useWebAudioApi';
 import { useOscMessages } from './composables/useOscMessages';
 import { aIInstructions, initialPrompt } from './mocks/initialPrompt';
 import { ControlKeys } from './components/ChatForm';
@@ -40,7 +39,6 @@ const App = () => {
     }, [conversation]);
 
     const sendPrompt = async (): Promise<void> => {
-        // playSineWave(); // Web Audio API experiment
         const userMessage = { role: 'user', content: prompt } as Message;
         setConversation((prevConversation) => [
             ...prevConversation,
@@ -93,6 +91,7 @@ const App = () => {
             }
 
             const data: APIResponse = await result.json();
+
             const content = data.choices[0].message.content;
             const newMessage: Message = {
                 role: 'assistant',
@@ -109,9 +108,10 @@ const App = () => {
         } catch (error) {
             console.error('Error:', error);
             setError('Failed to fetch response.');
+        } finally {
+            setIsLoading(false);
+            setMessageIndex(-1); // Reset index after sending prompt
         }
-        setIsLoading(false);
-        setMessageIndex(-1); // Reset index after sending prompt
     };
 
     const reevaluateCode = () => {
