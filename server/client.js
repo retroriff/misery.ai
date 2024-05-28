@@ -9,12 +9,16 @@ function connect() {
 
   ws.on("open", () => {
     console.log("Connected to WebSocket server")
-
-    // Create an OSC message
-    // const message = new OSC.Message("/stop", 440)
-    const args = ["electro", 2]
-    const message = new OSC.Message("/tr08/preset", ...args)
-    ws.send(message.pack()) // Send the packed OSC message
+    const args = ["Px.play;"]
+    const message = new OSC.Message("/px", ...args)
+    console.log(
+      "🚀 Message sent:",
+      message.address,
+      message.args,
+      "to",
+      SERVER_URL
+    )
+    ws.send(message.pack())
   })
 
   ws.on("message", (data) => {
@@ -28,7 +32,7 @@ function connect() {
 
   ws.on("error", (error) => {
     console.error("WebSocket error:", error)
-    ws.close() // Close the current connection to clean up before reconnecting
+    ws.close()
   })
 }
 

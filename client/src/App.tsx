@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { Message } from '~/types';
 import { useOscMessages } from './composables/useOscMessages';
-import { aIInstructions, initialPrompt } from './mocks/initialPrompt';
+import { initialPrompt } from './prompt/instructions';
+import { useAi } from './composables/useAi';
 import { ControlKeys } from './components/ChatForm';
 import './styles.css';
 
@@ -10,22 +11,18 @@ import MessageDisplay from './components/MessageDisplay';
 import WaveAnimation from './components/WaveAnimation';
 import ReevaluateBadge from './components/ReevaluateBadge';
 
-interface APIResponse {
-    choices: { message: { content: string } }[];
-}
-
 const App = () => {
     const [conversation, setConversation] = useState<Message[]>([
         initialPrompt
     ]);
     const conversationRef = useRef<HTMLDivElement>(null);
-    const [error, setError] = useState('');
     const { handleContent } = useOscMessages();
     const [hush, setHush] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const [messageIndex, setMessageIndex] = useState(-1);
     const [prompt, setPrompt] = useState('');
     const [showReevaluateBadge, setShowReevaluateBadge] = useState(false);
+
+    const { sendPrompt, isLoading, error, setError } = useAi();
 
     const scrollToBottom = () => {
         if (conversationRef.current) {
@@ -38,80 +35,33 @@ const App = () => {
         scrollToBottom();
     }, [conversation]);
 
-    const sendPrompt = async (): Promise<void> => {
+    const handleSendPrompt = async (): Promise<void> => {
         const userMessage = { role: 'user', content: prompt } as Message;
+
         setConversation((prevConversation) => [
             ...prevConversation,
             userMessage
         ]);
-        setIsLoading(true);
-        setError('');
 
         if (userMessage.content === 'Hush') {
             setHush(true);
         }
 
-        const messages = [aIInstructions];
+        const newMessage = await sendPrompt({
+            conversation,
+            prompt
+        });
 
-        messages.push(
-            ...conversation.map((c) => ({
-                role: c.role,
-                content: c.content
-            }))
-        );
-
-        messages.push({ role: 'user', content: prompt });
-
-        try {
-            const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-            const url = process.env.REACT_APP_OPENAI_API_URL;
-
-            if (!url || !apiKey) {
-                console.error(
-                    'API URL or API Key is not defined in the environment variables.'
-                );
-                setError('API configuration error.');
-                return;
-            }
-
-            const result = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    messages: messages,
-                    model: 'gpt-4o'
-                })
-            });
-
-            if (!result.ok) {
-                throw new Error(`Failed to fetch API: ${result.status}`);
-            }
-
-            const data: APIResponse = await result.json();
-
-            const content = data.choices[0].message.content;
-            const newMessage: Message = {
-                role: 'assistant',
-                content: content
-            };
-
-            setConversation((prevConversation) => [
-                ...prevConversation,
-                newMessage
-            ]);
+        if (newMessage) {
+            setConversation((prev) => [...prev, newMessage]);
             handleContent(newMessage.content);
             setError('');
             setPrompt('');
-        } catch (error) {
-            console.error('Error:', error);
+        } else {
             setError('Failed to fetch response.');
-        } finally {
-            setIsLoading(false);
-            setMessageIndex(-1); // Reset index after sending prompt
         }
+
+        setMessageIndex(-1); // Reset index after sending prompt
     };
 
     const reevaluateCode = () => {
@@ -127,7 +77,7 @@ const App = () => {
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === ControlKeys.Enter && prompt.trim()) {
-            sendPrompt();
+            handleSendPrompt();
             return;
         }
 
@@ -163,7 +113,7 @@ const App = () => {
 
     const handleClick = () => {
         if (prompt.trim()) {
-            sendPrompt();
+            handleSendPrompt();
         }
     };
 

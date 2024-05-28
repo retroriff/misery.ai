@@ -16,7 +16,8 @@ const handleCode = (codeBlock: string) => {
     const hasValidClasses = validClasses.test(codeBlock);
 
     if (hasValidClasses) {
-        // const sanitizedCode = codeBlock.replace(/\\/g, '\\\\');
+        console.log('👍 Code contains Px valid classes', codeBlock);
+
         return sendOscMessage({
             address: '/px',
             args: [codeBlock]
@@ -51,7 +52,6 @@ export const useOscMessages = () => {
     }, []);
 
     const handleContent = (content: string) => {
-        // console.log('👀 Handling content:', content);
         const codeRegex = /```([\s\S]+?)```/g;
         let match;
 
