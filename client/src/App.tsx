@@ -125,7 +125,7 @@ const App = () => {
         <div className="h-full flex-grow justify-center overflow-hidden">
           <div
             ref={conversationRef}
-            className="conversation flex h-full w-screen justify-center overflow-y-scroll pl-4"
+            className="conversation flex h-full w-screen justify-center overflow-y-scroll px-4"
           >
             <MessageDisplay conversation={conversation} />
           </div>
