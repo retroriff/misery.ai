@@ -1,23 +1,23 @@
-import { useWaveAnimation } from '../composables/useWaveAnimation';
+import { useWaveAnimation } from "../composables/useWaveAnimation"
 
 type WaveAnimationProps = {
-    isLoading: boolean;
-    shouldAnimate: boolean; // New prop to control the animation
-};
+  isLoading: boolean
+  shouldAnimate: boolean
+}
 
 const WaveAnimation = ({ isLoading, shouldAnimate }: WaveAnimationProps) => {
-    const scale = isLoading ? 10 : 10;
-    const speed = isLoading ? 4 : 2;
-    const waveAnimationRef = useWaveAnimation(100, scale, shouldAnimate, speed);
+  const scale = isLoading ? 10 : 10
+  const speed = isLoading ? 4 : 2
+  const waveAnimationRef = useWaveAnimation(100, scale, shouldAnimate, speed)
 
-    return (
-        <div id="wave-animation">
-            <canvas ref={waveAnimationRef}>
-                A wave animation that changes behavior while we are loading a
-                new response
-            </canvas>
-        </div>
-    );
-};
+  return (
+    <div id="wave-animation">
+      <canvas ref={waveAnimationRef}>
+        A wave animation that changes behavior while we are loading a new
+        response
+      </canvas>
+    </div>
+  )
+}
 
-export default WaveAnimation;
+export default WaveAnimation

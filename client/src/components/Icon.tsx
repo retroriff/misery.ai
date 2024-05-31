@@ -7,6 +7,7 @@ import Recycle from "../assets/icons/recycle.svg?react"
 import Stop from "../assets/icons/stop.svg?react"
 import User from "../assets/icons/user.svg?react"
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const iconTypes = {
   arrowRight: ArrowRight,
   arrowUp: ArrowUp,

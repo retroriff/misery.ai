@@ -1,16 +1,19 @@
 import { defineConfig, loadEnv } from "vite"
 import react from "@vitejs/plugin-react"
 import svgr from "vite-plugin-svgr"
+import tsconfigPaths from "vite-tsconfig-paths"
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "")
   return {
+    assetsInclude: ["**/*.md"],
     define: {
-      "process.env.OLLAMA_API_URL": JSON.stringify(env.OLLAMA_API_URL),
-      "process.env.OPENAI_API_KEY": JSON.stringify(env.OPENAI_API_KEY),
-      "process.env.OPENAI_API_URL": JSON.stringify(env.OPENAI_API_URL),
+      ...Object.keys(env).reduce((prev, key) => {
+        prev[`process.env.${key}`] = JSON.stringify(env[key])
+        return prev
+      }, {}),
     },
-    plugins: [react(), svgr()],
+    plugins: [react(), svgr(), tsconfigPaths()],
     server: {
       open: true,
       port: 3001,

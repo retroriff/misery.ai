@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from "react"
 import type { Message } from "~/types"
 import { useOscMessages } from "./composables/useOscMessages"
-import { initialPrompt } from "./prompt/instructions"
-import { useAi } from "./composables/useAi"
-import { ControlKeys } from "./components/ChatForm"
+import { useAi } from "~/composables/useAi"
+import { ControlKeys } from "~/types"
 
 import ChatForm from "./components/ChatForm"
 import MessageDisplay from "./components/MessageDisplay"
 import WaveAnimation from "./components/WaveAnimation"
 import ReevaluateBadge from "./components/ReevaluateBadge"
+
+const initialPrompt: Message = {
+  role: "assistant",
+  content: "Hello, mere mortal. How can I help you?",
+}
+
+const provider = "openai"
 
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
@@ -43,6 +49,7 @@ const App = () => {
     const newMessage = await sendPrompt({
       conversation,
       prompt,
+      provider,
     })
 
     if (newMessage) {
