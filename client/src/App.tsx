@@ -4,7 +4,6 @@ import { useOscMessages } from './composables/useOscMessages';
 import { initialPrompt } from './prompt/instructions';
 import { useAi } from './composables/useAi';
 import { ControlKeys } from './components/ChatForm';
-import './styles.css';
 
 import ChatForm from './components/ChatForm';
 import MessageDisplay from './components/MessageDisplay';
