@@ -1,38 +1,40 @@
-import { ReactComponent as ArrowRight } from '../assets/icons/arrow-right.svg';
-import { ReactComponent as ArrowUp } from '../assets/icons/arrow-up.svg';
-import { ReactComponent as Assistant } from '../assets/icons/assistant.svg';
-import { ReactComponent as Recycle } from '../assets/icons/recycle.svg';
-import { ReactComponent as Stop } from '../assets/icons/stop.svg';
-import { ReactComponent as User } from '../assets/icons/user.svg';
+/// <reference types="vite-plugin-svgr/client" />
+
+import ArrowRight from "../assets/icons/arrow-right.svg?react"
+import ArrowUp from "../assets/icons/arrow-up.svg?react"
+import Assistant from "../assets/icons/assistant.svg?react"
+import Recycle from "../assets/icons/recycle.svg?react"
+import Stop from "../assets/icons/stop.svg?react"
+import User from "../assets/icons/user.svg?react"
 
 export const iconTypes = {
-    arrowRight: ArrowRight,
-    arrowUp: ArrowUp,
-    assistant: Assistant,
-    recycle: Recycle,
-    stop: Stop,
-    user: User
-};
-
-interface IconProps {
-    className?: string;
-    name: keyof typeof iconTypes;
-    size?: 'sm' | 'md';
-    onClick?: () => void;
+  arrowRight: ArrowRight,
+  arrowUp: ArrowUp,
+  assistant: Assistant,
+  recycle: Recycle,
+  stop: Stop,
+  user: User,
 }
 
-const IconComponent = ({ name, size = 'sm', ...props }: IconProps) => {
-    const Icon = iconTypes[name];
-    const iconSize = size === 'sm' ? 16 : '24';
+interface IconProps {
+  className?: string
+  name: keyof typeof iconTypes
+  size?: "sm" | "md"
+  onClick?: () => void
+}
 
-    return (
-        <Icon
-            {...props}
-            width={iconSize}
-            height={iconSize}
-            className="fill-white"
-        />
-    );
-};
+const IconComponent = ({ name, size = "sm", ...props }: IconProps) => {
+  const Icon = iconTypes[name]
+  const iconSize = size === "sm" ? 16 : "24"
 
-export default IconComponent;
+  return (
+    <Icon
+      {...props}
+      width={iconSize}
+      height={iconSize}
+      className="fill-white"
+    />
+  )
+}
+
+export default IconComponent

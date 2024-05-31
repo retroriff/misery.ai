@@ -4,7 +4,7 @@
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon ./server/server.js",
-    "client": "cd client && PORT=3001 npm start"
+    "client": "cd client && PORT=3001 npm run dev"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
