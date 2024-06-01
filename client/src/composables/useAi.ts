@@ -2,7 +2,7 @@ import { useMemo, useState } from "react"
 import { Ollama } from "ollama/dist/browser.mjs"
 import OpenAI from "openai"
 import type { Message } from "~/types"
-import content from "~/prompt/from-scratch-20240530.md?raw"
+import content from "~/prompt/orchestra.md?raw"
 
 export type AIProvider = "openai" | "ollama"
 
@@ -62,6 +62,9 @@ export const useAi = () => {
           const dataOllama = await ollama.chat({
             model: "llama3",
             messages,
+            options: {
+              temperature: 0,
+            },
           })
           content = dataOllama.message.content
           break
