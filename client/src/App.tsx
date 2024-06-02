@@ -1,20 +1,19 @@
-import React, { useEffect, useRef, useState } from "react"
-import type { Message } from "~/types"
+import { KeyboardEvent, useEffect, useRef, useState } from "react"
+import { ControlKeys, type Message } from "~/types"
 import { useOscMessages } from "./composables/useOscMessages"
 import { useAi } from "~/composables/useAi"
-import { ControlKeys } from "~/types"
 
 import ChatForm from "./components/ChatForm"
 import MessageDisplay from "./components/MessageDisplay"
-import WaveAnimation from "./components/WaveAnimation"
 import ReevaluateBadge from "./components/ReevaluateBadge"
+import WaveAnimation from "./components/WaveAnimation"
 
 const initialPrompt: Message = {
   role: "assistant",
   content: "Hello, mere mortal. How can I help you?",
 }
 
-const provider = "openai"
+const provider = "ollama"
 
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
@@ -61,7 +60,7 @@ const App = () => {
       setError("Failed to fetch response.")
     }
 
-    setMessageIndex(-1) // Reset index after sending prompt
+    setMessageIndex(-1)
   }
 
   const reevaluateCode = () => {
@@ -75,7 +74,7 @@ const App = () => {
     }, 500)
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === ControlKeys.Enter && prompt.trim()) {
       handleSendPrompt()
       return

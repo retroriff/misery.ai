@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react"
+import React, { KeyboardEvent, useRef, useEffect } from "react"
 import Button from "./Button"
 import { ControlKeys } from "../types"
 
@@ -6,7 +6,7 @@ type ChatFormProps = {
   isLoading: boolean
   prompt: string
   setPrompt: React.Dispatch<React.SetStateAction<string>>
-  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void
+  onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void
   onClick: () => void
 }
 
@@ -23,7 +23,7 @@ const InputArea = ({
     return Object.values(ControlKeys).includes(key as ControlKeys)
   }
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (isControlKey(event.key)) {
       event.preventDefault()
       onKeyDown(event)

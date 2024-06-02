@@ -1,18 +1,19 @@
-import { useMemo, useState } from "react"
-import { Ollama } from "ollama/dist/browser.mjs"
-import OpenAI from "openai"
+import { useState } from "react"
 import type { Message } from "~/types"
+import { generateGeminiContent } from "./useGemini"
+import { generateOpenAiContent } from "./useOpenAi"
+import { generateOllamaContent } from "./useOllama"
 import content from "~/prompt/orchestra.md?raw"
 
-export type AIProvider = "openai" | "ollama"
+export type AIProvider = "gemini" | "openai" | "ollama"
 
-type SendPromt = {
+type SendPrompt = {
   conversation: Message[]
   prompt: string
   provider?: AIProvider
 }
 
-const aIInstructions: Message = {
+const aiInstructions: Message = {
   role: "user",
   content,
 }
@@ -21,27 +22,16 @@ export const useAi = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
 
-  const openai = useMemo(
-    () =>
-      new OpenAI({
-        apiKey: import.meta.env.OPENAI_API_KEY,
-        dangerouslyAllowBrowser: true,
-      }),
-    []
-  )
-
-  const ollama = new Ollama({ host: "http://localhost:11434" })
-
   const sendPrompt = async ({
     conversation,
     prompt,
     provider = "openai",
-  }: SendPromt): Promise<Message | null> => {
+  }: SendPrompt): Promise<Message | null> => {
     setIsLoading(true)
     setError("")
 
     const messages: Message[] = [
-      aIInstructions,
+      aiInstructions,
       ...conversation.map((c) => ({ role: c.role, content: c.content })),
       { role: "user", content: prompt },
     ]
@@ -50,28 +40,17 @@ export const useAi = () => {
       let content = ""
 
       switch (provider) {
-        case "openai": {
-          const dataOpenai = await openai.chat.completions.create({
-            model: "gpt-4o",
-            messages,
-          })
-          content = dataOpenai.choices[0].message.content ?? ""
+        case "gemini":
+          content = await generateGeminiContent(messages)
           break
-        }
-        case "ollama": {
-          const dataOllama = await ollama.chat({
-            model: "llama3",
-            messages,
-            options: {
-              temperature: 0,
-            },
-          })
-          content = dataOllama.message.content
+        case "openai":
+          content = await generateOpenAiContent(messages)
           break
-        }
+        case "ollama":
+          content = await generateOllamaContent(messages)
+          break
         default:
-          console.log("😬 Provider not supported")
-          break
+          throw new Error("Provider not supported")
       }
 
       const newMessage: Message = {
@@ -80,13 +59,11 @@ export const useAi = () => {
       }
 
       setIsLoading(false)
-
       return newMessage
     } catch (error) {
       console.error("Error:", error)
       setError("Failed to fetch response.")
       setIsLoading(false)
-
       return null
     }
   }
