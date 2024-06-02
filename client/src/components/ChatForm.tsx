@@ -24,12 +24,21 @@ const InputArea = ({
   }
 
   const handleKeyPress = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (
-      isControlKey(event.key) &&
-      !(event.key === ControlKeys.Enter && event.shiftKey)
-    ) {
-      event.preventDefault()
-      onKeyDown(event)
+    if (isControlKey(event.key)) {
+      if (event.key === ControlKeys.Enter && !event.shiftKey) {
+        event.preventDefault()
+        onKeyDown(event)
+      } else if (
+        (event.key === ControlKeys.ArrowUp ||
+          event.key === ControlKeys.ArrowDown) &&
+        event.metaKey
+      ) {
+        event.preventDefault()
+        onKeyDown(event)
+      } else if (event.key === ControlKeys.At) {
+        event.preventDefault()
+        onKeyDown(event)
+      }
     }
   }
 
