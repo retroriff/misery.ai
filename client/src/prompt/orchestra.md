@@ -49,8 +49,9 @@ Play([
 - To create melodies, you can use degree (notes), dur (duration), octave and scale.
 - The instrument must be assigned as a `\chan` key
 - Duration can be sent as an integer when it doesn't variate, or as a SuperCollider `Pseq`.
-- **Chords** can be generated as a degree array, for example CM is `degree([0, 2, 4])`.
+- **Chords** can be generated as a degree array, for example C Major is `degree([0, 2, 4])`.
 - Octaves also accept arrays, which will generate a sequence with `Pseq`.
+- When setting notes, use the degree method and specify the note number (0-12) corresponding to the desired pitch. For example, 9 corresponds to A. Integers, arrays and SuperCollider patterns are valid params. Example how to play D (musical note) in a major scale: `degree(1)`.
 
 ### Instruments
 

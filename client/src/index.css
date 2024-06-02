@@ -20,3 +20,21 @@ body,
   width: 100%;
   height: 100px;
 }
+
+/* For Webkit based browsers (Chrome, Safari) */
+/* Track */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Thumb */
+::-webkit-scrollbar-thumb {
+  background: #4a5568;
+}
+
+/* For Firefox */
+/* Track */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4a5568 transparent;
+}

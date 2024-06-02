@@ -13,7 +13,7 @@ const initialPrompt: Message = {
   content: "Hello, mere mortal. How can I help you?",
 }
 
-const provider = "ollama"
+const provider = "gemini"
 
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
@@ -74,7 +74,7 @@ const App = () => {
     }, 500)
   }
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === ControlKeys.Enter && prompt.trim()) {
       handleSendPrompt()
       return
