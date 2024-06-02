@@ -40,6 +40,12 @@ const InputArea = ({
     }
   }, [isLoading, prompt])
 
+  useEffect(() => {
+    if (!isLoading) {
+      textareaRef.current?.focus()
+    }
+  }, [isLoading])
+
   return (
     <div className="flex items-center rounded-xl border border-gray-200 p-2 text-xl gap-4">
       <textarea
