@@ -13,7 +13,7 @@ const initialPrompt: Message = {
   content: "Hello, mere mortal. How can I help you?",
 }
 
-const provider = "gemini"
+const provider = "openai"
 
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])

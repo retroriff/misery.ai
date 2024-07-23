@@ -14,6 +14,7 @@ const osc = new OSC({
 const handleCode = (codeBlock: string) => {
   const validClasses = /^\s*(Nfx|Ns|Play|Px|TR08)/
   const hasValidClasses = validClasses.test(codeBlock)
+  console.log(codeBlock)
 
   if (hasValidClasses) {
     console.log("👍 Code contains Px valid classes", codeBlock)
@@ -23,7 +24,6 @@ const handleCode = (codeBlock: string) => {
       args: [codeBlock],
     })
   }
-
   console.log("😬 Code does not contain Px valid classes")
 }
 
