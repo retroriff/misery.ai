@@ -84,7 +84,7 @@ function App({ shouldAnimate }: { shouldAnimate: boolean }) {
   return (
     <>
       <pre
-        className="absolute text-white right-0 top-0 bg-primary-bg bg-opacity-80 inline-block overflow-x-auto whitespace-nowrap"
+        className="absolute text-white right-0 top-0 bg-primary-bg bg-opacity-80 inline-block overflow-x-auto whitespace-nowrap max-w-full"
         contentEditable={isEditing}
         onBlur={handleSave}
         onClick={handleEdit}
