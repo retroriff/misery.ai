@@ -2,6 +2,9 @@
 // @ts-nocheck
 import { useHydra } from "~/composables/useHydra"
 import { useEffect, useRef, useState } from "react"
+import Prism from "prismjs"
+// import "prismjs/themes/prism-okaidia.css"
+import "~/assets/css/prism-atom-dark.css" // Import Prism dark theme CSS
 
 function App({ shouldAnimate }: { shouldAnimate: boolean }) {
   const [canvasRef, hydraLoaded] = useHydra()
@@ -30,6 +33,10 @@ function App({ shouldAnimate }: { shouldAnimate: boolean }) {
     executeHydraCode(singleLineCode)
   }, [hydraLoaded])
 
+  useEffect(() => {
+    Prism.highlightAll()
+  }, [hydraCode])
+
   const executeHydraCode = (code: string) => {
     try {
       new Function(code)()
@@ -39,7 +46,6 @@ function App({ shouldAnimate }: { shouldAnimate: boolean }) {
   }
 
   const handleEdit = () => {
-    console.log("Entering edit mode")
     setIsEditing(true)
     setTimeout(() => {
       if (codeRef.current) {
@@ -56,13 +62,8 @@ function App({ shouldAnimate }: { shouldAnimate: boolean }) {
   }
 
   const handleSave = () => {
-    console.log("Saving and executing code")
     if (codeRef.current) {
-      const updatedCode = codeRef.current.innerText
-        .replace(/\s*\.\s*/g, ".")
-        .replace(/\s+/g, " ")
-        .trim()
-      console.log("Updated Code: ", updatedCode)
+      const updatedCode = codeRef.current.innerText.trim()
       setHydraCode(updatedCode)
       executeHydraCode(updatedCode)
     }
@@ -70,7 +71,6 @@ function App({ shouldAnimate }: { shouldAnimate: boolean }) {
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log("Key pressed: ", event.key)
     if (event.key === "Enter") {
       event.preventDefault() // Prevent inserting newline
       if (isEditing) {
@@ -83,8 +83,8 @@ function App({ shouldAnimate }: { shouldAnimate: boolean }) {
 
   return (
     <>
-      <div
-        className="absolute text-white right-0 top-0 p-2 font-mono bg-primary-bg bg-opacity-80 inline-block overflow-x-auto whitespace-nowrap"
+      <pre
+        className="absolute text-white right-0 top-0 bg-primary-bg bg-opacity-80 inline-block overflow-x-auto whitespace-nowrap"
         contentEditable={isEditing}
         onBlur={handleSave}
         onClick={handleEdit}
@@ -93,8 +93,8 @@ function App({ shouldAnimate }: { shouldAnimate: boolean }) {
         suppressContentEditableWarning={true}
         tabIndex={0}
       >
-        {hydraCode}
-      </div>
+        <code className="language-javascript">{hydraCode}</code>
+      </pre>
       <canvas
         className="absolute w-full h-full inset-0 -z-10"
         ref={canvasRef}
