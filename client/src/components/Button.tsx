@@ -22,7 +22,7 @@ const Button = ({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center justify-center gap-2 rounded-lg bg-pink-600 fill-white p-4 font-bold text-white hover:bg-pink-800 ${className}`}
+      className={`flex items-center justify-center gap-2 bg-gray-900 fill-white p-4 font-bold text-white hover:bg-pink-800 ${className}`}
     >
       {icon && <Icon name={isLoading ? "stop" : icon} />}
       {!hideText && children}

@@ -8,6 +8,9 @@ export default defineConfig(({ mode }) => {
   return {
     assetsInclude: ["**/*.md"],
     define: {
+      global: {
+        window: {},
+      },
       ...Object.keys(env).reduce((prev, key) => {
         prev[`process.env.${key}`] = JSON.stringify(env[key])
         return prev

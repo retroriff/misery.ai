@@ -1,19 +1,19 @@
 import { KeyboardEvent, useEffect, useRef, useState } from "react"
 import { ControlKeys, type Message } from "~/types"
 import { useOscMessages } from "./composables/useOscMessages"
-import { useAi } from "~/composables/useAi"
+import { AIProvider, useAi } from "~/composables/useAi"
 
 import ChatForm from "./components/ChatForm"
+import Hydra from "./components/HydraAnimation"
 import MessageDisplay from "./components/MessageDisplay"
 import ReevaluateBadge from "./components/ReevaluateBadge"
-import WaveAnimation from "./components/WaveAnimation"
 
 const initialPrompt: Message = {
   role: "assistant",
   content: "Hello, mere mortal. How can I help you?",
 }
 
-const provider = "openai"
+const provider: AIProvider = "gemini"
 
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
@@ -119,7 +119,7 @@ const App = () => {
   const shouldAnimate = conversation.length > 1 && !hush
 
   return (
-    <main className="transition-width h-full bg-primary-bg">
+    <main className="transition-width h-full">
       <div className="m-auto flex h-full w-full flex-col justify-between">
         <div className="h-full flex-grow justify-center overflow-hidden">
           <div
@@ -130,8 +130,7 @@ const App = () => {
           </div>
         </div>
         <div className="m-auto w-full p-4">
-          <WaveAnimation isLoading={isLoading} shouldAnimate={shouldAnimate} />
-          <div className="m-auto max-w-screen-lg">
+          <div className="m-auto max-w-4xl">
             <ChatForm
               isLoading={isLoading}
               onKeyDown={handleKeyDown}
@@ -144,6 +143,7 @@ const App = () => {
           </div>
         </div>
       </div>
+      <Hydra shouldAnimate={shouldAnimate} />
     </main>
   )
 }

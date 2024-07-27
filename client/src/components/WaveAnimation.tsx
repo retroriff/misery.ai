@@ -11,7 +11,7 @@ const WaveAnimation = ({ isLoading, shouldAnimate }: WaveAnimationProps) => {
   const waveAnimationRef = useWaveAnimation(100, scale, shouldAnimate, speed)
 
   return (
-    <div id="wave-animation">
+    <div id="wave-animation" className="w-full h-full">
       <canvas ref={waveAnimationRef}>
         A wave animation that changes behavior while we are loading a new
         response
