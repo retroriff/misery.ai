@@ -5,7 +5,7 @@ import { generateOpenAiContent } from "./useOpenAi"
 import { generateOllamaContent } from "./useOllama"
 import content from "~/prompt/orchestra.md?raw"
 
-export type AIProvider = "gemini" | "openai" | "ollama"
+export type AIProvider = "gemini" | "ollama" | "openai"
 
 type SendPrompt = {
   conversation: Message[]
@@ -14,8 +14,8 @@ type SendPrompt = {
 }
 
 const aiInstructions: Message = {
-  role: "user",
   content,
+  role: "user",
 }
 
 export const useAi = () => {

@@ -39,11 +39,6 @@ export const generateGeminiContent = async (
     ],
   }
 
-  console.log(
-    "🚀 ~ file: useGemini.ts ~ line 64 ~ generateGeminiContent ~ request",
-    request
-  )
-
   const result = await model.generateContent(request)
   const response = await result.response
   return response.text()

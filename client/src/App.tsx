@@ -9,11 +9,11 @@ import MessageDisplay from "./components/MessageDisplay"
 import ReevaluateBadge from "./components/ReevaluateBadge"
 
 const initialPrompt: Message = {
-  role: "assistant",
   content: "Hello, mere mortal. How can I help you?",
+  role: "assistant",
 }
 
-const provider: AIProvider = "openai"
+const provider: AIProvider = "gemini"
 
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
