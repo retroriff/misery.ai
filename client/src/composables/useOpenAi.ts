@@ -8,7 +8,7 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 })
 
-const AiResponse = z.object({
+const aiResponse = z.object({
   code: z.object({
     content: z.string().describe("The code for playing music or visuals"),
     type: z.enum(["music", "visual"]),
@@ -22,7 +22,7 @@ export const generateOpenAiContent = async (
   const dataOpenai = await openai.chat.completions.create({
     model: "gpt-4o-2024-08-06",
     messages,
-    response_format: zodResponseFormat(AiResponse, "aiResponse"),
+    response_format: zodResponseFormat(aiResponse, "aiResponse"),
   })
   return dataOpenai.choices[0].message.content ?? ""
 }

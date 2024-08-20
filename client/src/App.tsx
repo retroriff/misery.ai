@@ -121,25 +121,27 @@ const App = () => {
   return (
     <main className="transition-width h-full">
       <div className="m-auto flex h-full w-full flex-col justify-between">
-        <div className="h-full flex-grow justify-center overflow-hidden">
-          <div
-            ref={conversationRef}
-            className="conversation flex h-full w-screen justify-center overflow-y-scroll px-4"
-          >
-            <MessageDisplay conversation={conversation} />
+        <div className="h-full flex flex-col">
+          <div className="h-full flex-grow justify-center overflow-hidden">
+            <div
+              ref={conversationRef}
+              className="conversation flex h-full justify-center overflow-y-scroll px-4"
+            >
+              <MessageDisplay conversation={conversation} />
+            </div>
           </div>
-        </div>
-        <div className="m-auto w-full p-4">
-          <div className="m-auto max-w-4xl">
-            <ChatForm
-              isLoading={isLoading}
-              onKeyDown={handleKeyDown}
-              onClick={handleClick}
-              prompt={prompt}
-              setPrompt={setPrompt}
-            />
-            {error && <p className="text-red-500">{error}</p>}
-            <ReevaluateBadge show={showReevaluateBadge} />
+          <div className="m-auto w-full p-4">
+            <div className="m-auto max-w-4xl">
+              <ChatForm
+                isLoading={isLoading}
+                onKeyDown={handleKeyDown}
+                onClick={handleClick}
+                prompt={prompt}
+                setPrompt={setPrompt}
+              />
+              {error && <p className="text-red-500">{error}</p>}
+              <ReevaluateBadge show={showReevaluateBadge} />
+            </div>
           </div>
         </div>
       </div>
