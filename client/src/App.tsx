@@ -45,15 +45,24 @@ const App = () => {
       setHush(true)
     }
 
-    const newMessage = await sendPrompt({
+    const newResponse = await sendPrompt({
       conversation,
       prompt,
       provider,
     })
 
-    if (newMessage) {
-      setConversation((prev) => [...prev, newMessage])
-      handleContent(newMessage.content)
+    if (newResponse) {
+      const { musicCode, responseText } = newResponse
+
+      setConversation((prev) => [
+        ...prev,
+        { content: responseText, role: "assistant" },
+      ])
+
+      if (musicCode) {
+        handleContent(musicCode)
+      }
+
       setError("")
       setPrompt("")
     } else {

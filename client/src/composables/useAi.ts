@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Message } from "~/types"
+import type { Message, StructuredResponse } from "~/types"
 import { generateGeminiContent } from "./useGemini"
 import { generateOpenAiContent } from "./useOpenAi"
 import { generateOllamaContent } from "./useOllama"
@@ -26,40 +26,37 @@ export const useAi = () => {
     conversation,
     prompt,
     provider = "openai",
-  }: SendPrompt): Promise<Message | null> => {
+  }: SendPrompt): Promise<StructuredResponse | null> => {
     setIsLoading(true)
     setError("")
 
     const messages: Message[] = [
       aiInstructions,
-      ...conversation.map((c) => ({ role: c.role, content: c.content })),
-      { role: "user", content: prompt },
+      ...conversation.map((c) => ({ content: c.content, role: c.role })),
+      { content: prompt, role: "user" },
     ]
 
     try {
-      let content = ""
+      let structuredResponse: StructuredResponse
 
       switch (provider) {
         case "gemini":
-          content = await generateGeminiContent(messages)
+          structuredResponse = await generateGeminiContent(messages)
           break
         case "openai":
-          content = await generateOpenAiContent(messages)
+          structuredResponse = await generateOpenAiContent(messages)
           break
         case "ollama":
-          content = await generateOllamaContent(messages)
+          structuredResponse = await generateOllamaContent(messages)
           break
         default:
           throw new Error("Provider not supported")
       }
 
-      const newMessage: Message = {
-        role: "assistant",
-        content,
-      }
+      console.log("structuredResponse", structuredResponse)
 
       setIsLoading(false)
-      return newMessage
+      return structuredResponse
     } catch (error) {
       console.error("Error:", error)
       setError("Failed to fetch response.")

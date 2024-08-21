@@ -11,32 +11,31 @@ import { Message, StructuredResponse } from "~/types"
 
 const gemini = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY)
 
-const functionDeclarations = [
-  {
-    name: "code_generator",
-    description:
-      "Returns code for playing music or visuals based on the user request and following the provided instructions",
-    parameters: {
-      properties: {
-        musicCode: {
-          description: "The code for playing music",
-          type: SchemaType.STRING,
-        },
-        visualCode: {
-          description: "The code for playing visuals",
-          type: SchemaType.STRING,
-        },
-        response: {
-          description: "The answer from the model",
-          type: SchemaType.STRING,
-        },
+export const codeGeneratorFunction = {
+  name: "code_generator",
+  description:
+    "Returns code for playing music or visuals based on the user request and following the provided instructions",
+  parameters: {
+    properties: {
+      musicCode: {
+        description: "The code for playing music",
+        type: SchemaType.STRING,
       },
-      required: ["response"],
-      type: SchemaType.OBJECT,
+      responseText: {
+        description: "The answer from the model",
+        type: SchemaType.STRING,
+      },
+      visualCode: {
+        description: "The code for playing visuals",
+        type: SchemaType.STRING,
+      },
     },
+    required: ["responseText"],
+    type: SchemaType.OBJECT,
   },
-]
+}
 
+const functionDeclarations = [codeGeneratorFunction]
 const tools: Tool[] = [{ functionDeclarations }]
 
 const safetySettings = [
@@ -60,7 +59,7 @@ const safetySettings = [
 
 export const generateGeminiContent = async (
   messages: Message[]
-): Promise<string> => {
+): Promise<StructuredResponse> => {
   const model = await gemini.getGenerativeModel({
     // Forced function calling only supported by gemini-1.5-pro-001
     // https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling
@@ -85,6 +84,12 @@ export const generateGeminiContent = async (
   const result = await model.generateContent(request)
   const response = await result.response
   const functionCallResponse = response.functionCalls() ?? []
-  const formattedResponse = functionCallResponse[0].args as StructuredResponse
-  return formattedResponse.response
+  let structuredResponse = functionCallResponse[0].args as StructuredResponse
+
+  // Check if the model used the provided function
+  if (functionCallResponse.length === 0) {
+    structuredResponse = { responseText: response.text() }
+  }
+
+  return structuredResponse
 }

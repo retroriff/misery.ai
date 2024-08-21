@@ -6,12 +6,13 @@ export enum ControlKeys {
 }
 
 export type Message = {
-  role: "user" | "assistant"
   content: string
+  role: "user" | "assistant"
+  structuredResponse?: StructuredResponse
 }
 
 export type StructuredResponse = {
-  musicCode: string
-  response: string
-  visualCode: string
+  musicCode?: string
+  responseText: string
+  visualCode?: string
 }
