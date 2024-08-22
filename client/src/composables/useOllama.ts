@@ -8,7 +8,7 @@ export const generateOllamaContent = async (
   messages: Message[]
 ): Promise<StructuredResponse> => {
   const response = await ollama.chat({
-    model: "llama3",
+    model: "llama3-groq-tool-use",
     messages,
     options: {
       temperature: 0,

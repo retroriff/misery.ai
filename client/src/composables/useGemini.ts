@@ -18,7 +18,7 @@ export const codeGeneratorFunction = {
   parameters: {
     properties: {
       musicCode: {
-        description: "The code for playing music",
+        description: "Only the code for playing music",
         type: SchemaType.STRING,
       },
       responseText: {
@@ -26,7 +26,7 @@ export const codeGeneratorFunction = {
         type: SchemaType.STRING,
       },
       visualCode: {
-        description: "The code for playing visuals",
+        description: "Only the code for playing visuals",
         type: SchemaType.STRING,
       },
     },
