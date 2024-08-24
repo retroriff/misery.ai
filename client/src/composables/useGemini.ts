@@ -11,6 +11,13 @@ import { Message, StructuredResponse } from "~/types"
 
 const gemini = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY)
 
+/*
+TODO: Ollama "Tool" type doesn't allow child objects like:
+code: {
+  music: string
+  visual: string
+}
+*/
 export const codeGeneratorFunction = {
   name: "code_generator",
   description:

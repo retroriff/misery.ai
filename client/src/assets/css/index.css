@@ -10,11 +10,21 @@ body,
 
 .conversation {
   scrollbar-color: #333 theme("colors.primary-bg");
+
+  /* Automatically scroll to the bottom of the conversation */
+  @apply flex-wrap;
+  align-content: end;
+  scroll-snap-type: y proximity;
+
+  &::after {
+    @apply block content-[""];
+    scroll-snap-align: end;
+  }
 }
 
 .response {
   p {
-    @apply inline-block bg-primary-bg bg-opacity-80 mt-1 mb-2 py-1 px-3;
+    @apply inline-block bg-primary-bg bg-opacity-70 mt-1 mb-2 py-1 px-3;
 
     &:first-of-type {
       @apply mt-1;
@@ -25,7 +35,7 @@ body,
     @apply !bg-transparent rounded-none !p-0 !block !m-0;
 
     code {
-      @apply !bg-primary-bg !bg-opacity-80 !leading-[3rem] p-2;
+      @apply !bg-primary-bg !bg-opacity-70 !leading-[3rem] p-2;
     }
   }
 }

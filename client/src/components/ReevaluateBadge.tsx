@@ -1,36 +1,52 @@
-import { useState, useEffect } from 'react';
-import Icon from './Icon';
+import { useState, useEffect } from "react"
+import Icon from "./Icon"
+import { Message } from "~/types"
 
 interface BadgeProps {
-    show: boolean;
+  show: boolean
+  conversation: Message[]
+  handleContent: (content: string) => void
 }
 
-const ReevaluateBadge = ({ show }: BadgeProps) => {
-    const [isVisible, setIsVisible] = useState(show);
+const ReevaluateBadge = ({ show, conversation, handleContent }: BadgeProps) => {
+  const [isVisible, setIsVisible] = useState(show)
 
-    useEffect(() => {
-        setIsVisible(show);
-    }, [show]);
+  useEffect(() => {
+    if (show) {
+      setIsVisible(true)
+      const reevaluateCode = conversation[conversation.length - 1]?.content
 
-    const handleAnimationEnd = () => {
-        if (!show) {
-            setIsVisible(false);
-        }
-    };
+      if (reevaluateCode) {
+        console.log("🔄 Reevaluate", reevaluateCode)
+        handleContent(reevaluateCode)
+      }
 
-    return (
-        <div
-            className="absolute left-4 top-4 flex items-center gap-1 rounded bg-pink-800 px-2 py-1 text-white"
-            onAnimationEnd={handleAnimationEnd}
-            style={{
-                transition: 'opacity 0.5s ease',
-                opacity: isVisible ? 1 : 0
-            }}
-        >
-            <Icon name="recycle" />
-            <span>Reevaluate</span>
-        </div>
-    );
-};
+      // Hide the badge after a short delay
+      setTimeout(() => {
+        setIsVisible(false)
+      }, 500)
+    }
+  }, [show, conversation, handleContent])
 
-export default ReevaluateBadge;
+  const handleAnimationEnd = () => {
+    if (!isVisible) {
+      setIsVisible(false)
+    }
+  }
+
+  return (
+    <div
+      className="absolute left-4 top-4 flex items-center gap-1 rounded bg-pink-800 px-2 py-1 text-white"
+      onAnimationEnd={handleAnimationEnd}
+      style={{
+        transition: "opacity 0.5s ease",
+        opacity: isVisible ? 1 : 0,
+      }}
+    >
+      <Icon name="recycle" />
+      <span>Reevaluate</span>
+    </div>
+  )
+}
+
+export default ReevaluateBadge
