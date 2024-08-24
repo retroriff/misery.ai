@@ -5,10 +5,14 @@ import { Message } from "~/types"
 interface BadgeProps {
   show: boolean
   conversation: Message[]
-  handleContent: (content: string) => void
+  handleMusicContent: (content: string) => void
 }
 
-const ReevaluateBadge = ({ show, conversation, handleContent }: BadgeProps) => {
+const ReevaluateBadge = ({
+  show,
+  conversation,
+  handleMusicContent,
+}: BadgeProps) => {
   const [isVisible, setIsVisible] = useState(show)
 
   useEffect(() => {
@@ -18,7 +22,7 @@ const ReevaluateBadge = ({ show, conversation, handleContent }: BadgeProps) => {
 
       if (reevaluateCode) {
         console.log("🔄 Reevaluate", reevaluateCode)
-        handleContent(reevaluateCode)
+        handleMusicContent(reevaluateCode)
       }
 
       // Hide the badge after a short delay
@@ -26,7 +30,7 @@ const ReevaluateBadge = ({ show, conversation, handleContent }: BadgeProps) => {
         setIsVisible(false)
       }, 500)
     }
-  }, [show, conversation, handleContent])
+  }, [show, conversation, handleMusicContent])
 
   const handleAnimationEnd = () => {
     if (!isVisible) {

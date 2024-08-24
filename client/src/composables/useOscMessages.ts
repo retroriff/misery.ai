@@ -51,7 +51,7 @@ export const useOscMessages = () => {
     return () => osc.close()
   }, [])
 
-  const handleContent = (content: string) => {
+  const handleMusicContent = (content: string) => {
     const codeRegex = /```([\s\S]+?)```/g
     let match
 
@@ -60,5 +60,5 @@ export const useOscMessages = () => {
     }
   }
 
-  return { sendOscMessage, handleContent }
+  return { sendOscMessage, handleMusicContent }
 }

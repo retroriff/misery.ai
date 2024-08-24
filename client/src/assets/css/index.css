@@ -8,10 +8,10 @@ body,
   height: 100%;
 }
 
+/* Automatically scroll to the bottom of the conversation */
 .conversation {
   scrollbar-color: #333 theme("colors.primary-bg");
 
-  /* Automatically scroll to the bottom of the conversation */
   @apply flex-wrap;
   align-content: end;
   scroll-snap-type: y proximity;
@@ -24,7 +24,7 @@ body,
 
 .response {
   p {
-    @apply inline-block bg-primary-bg bg-opacity-70 mt-1 mb-2 py-1 px-3;
+    @apply inline-block bg-primary-bg bg-opacity-70 mt-3 mb-0 py-1 px-3;
 
     &:first-of-type {
       @apply mt-1;

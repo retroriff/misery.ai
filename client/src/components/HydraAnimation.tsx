@@ -83,7 +83,7 @@ function App({ shouldAnimate }: { shouldAnimate: boolean }) {
 
   return (
     <>
-      <pre
+      {/* <pre
         className="absolute text-white right-0 top-0 bg-primary-bg bg-opacity-80 inline-block overflow-x-auto whitespace-nowrap max-w-full"
         contentEditable={isEditing}
         onBlur={handleSave}
@@ -94,7 +94,7 @@ function App({ shouldAnimate }: { shouldAnimate: boolean }) {
         tabIndex={0}
       >
         <code className="language-javascript">{hydraCode}</code>
-      </pre>
+      </pre> */}
       <canvas
         className="absolute w-full h-full inset-0 -z-10"
         ref={canvasRef}

@@ -17,7 +17,8 @@ const provider: AIProvider = "openai"
 
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
-  const { handleContent } = useOscMessages()
+  const [musicConversation, setMusicConversation] = useState<Message[]>([])
+  const { handleMusicContent } = useOscMessages()
   const [hush, setHush] = useState(false)
   const [messageIndex, setMessageIndex] = useState(-1)
   const [prompt, setPrompt] = useState("")
@@ -48,7 +49,11 @@ const App = () => {
       ])
 
       if (musicCode) {
-        handleContent(musicCode)
+        setMusicConversation((prev) => [
+          ...prev,
+          { content: musicCode, role: "assistant" },
+        ])
+        handleMusicContent(musicCode)
       }
 
       setError("")
@@ -105,32 +110,41 @@ const App = () => {
   const shouldAnimate = conversation.length > 1 && !hush
 
   return (
-    <main className="transition-width h-full">
-      <div className="m-auto flex h-full w-full flex-col justify-between">
-        <div className="h-full flex flex-col">
-          <div className="h-full flex-grow justify-center overflow-hidden">
-            <div className="conversation flex h-full justify-center overflow-y-scroll px-4">
-              <MessageDisplay conversation={conversation} />
-            </div>
-          </div>
-          <div className="m-auto w-full p-4">
-            <div className="m-auto max-w-4xl">
-              <ChatForm
-                isLoading={isLoading}
-                onKeyDown={handleKeyDown}
-                onClick={handleClick}
-                prompt={prompt}
-                setPrompt={setPrompt}
-              />
-              {error && <p className="text-red-500">{error}</p>}
-              <ReevaluateBadge
-                conversation={conversation}
-                handleContent={handleContent}
-                show={showReevaluateBadge}
-              />
-            </div>
+    <main className="flex h-full w-full justify-between p-8 gap-8">
+      <div className="flex-1 h-full flex flex-col">
+        <div className="h-full flex-grow justify-center overflow-hidden">
+          <div className="conversation flex h-full justify-center overflow-y-auto">
+            <MessageDisplay conversation={conversation} responseType="chat" />
           </div>
         </div>
+        <div className="m-auto w-full pt-4">
+          <div className="m-auto max-w-4xl">
+            <ChatForm
+              isLoading={isLoading}
+              onKeyDown={handleKeyDown}
+              onClick={handleClick}
+              prompt={prompt}
+              setPrompt={setPrompt}
+            />
+            {error && <p className="text-red-500">{error}</p>}
+            <ReevaluateBadge
+              conversation={conversation}
+              handleMusicContent={handleMusicContent}
+              show={showReevaluateBadge}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="flex-1 h-full flex flex-col text-red-500">
+        <div className="mt-auto">
+          <MessageDisplay
+            conversation={musicConversation}
+            responseType="music"
+          />
+        </div>
+      </div>
+      <div className="flex-1 h-full flex flex-col text-red-500">
+        <div className="mt-auto"></div>
       </div>
       <Hydra shouldAnimate={shouldAnimate} />
     </main>
