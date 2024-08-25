@@ -132,9 +132,10 @@ const App = () => {
             />
             {error && <p className="text-red-500">{error}</p>}
             <ReevaluateBadge
-              conversation={musicConversation}
               handleMusicCode={handleMusicCode}
-              show={showReevaluateBadge}
+              hideReevaluateBadge={() => setShowReevaluateBadge(false)}
+              musicConversation={musicConversation}
+              showBadge={showReevaluateBadge}
             />
           </div>
         </div>
