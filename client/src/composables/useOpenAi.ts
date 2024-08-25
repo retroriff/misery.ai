@@ -9,9 +9,12 @@ const openai = new OpenAI({
 })
 
 const aiResponse = z.object({
-  musicCode: z.string().optional().describe("The code for playing music"),
-  responseText: z.string().describe("The answer from the model"),
-  visualCode: z.string().optional().describe("The code for playing visuals"),
+  musicCode: z.string().optional().describe("Only the code for playing music"),
+  responseText: z.string().describe("The answer from the model without code"),
+  visualCode: z
+    .string()
+    .optional()
+    .describe("Only the code for playing visual animations"),
 })
 
 export const generateOpenAiContent = async (

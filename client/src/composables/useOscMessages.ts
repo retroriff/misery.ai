@@ -11,22 +11,6 @@ const osc = new OSC({
   plugin: new OSC.WebsocketClientPlugin(config),
 })
 
-const handleCode = (codeBlock: string) => {
-  const validClasses = /^\s*(Nfx|Ns|Play|Px|TR08)/
-  const hasValidClasses = validClasses.test(codeBlock)
-  console.log(codeBlock)
-
-  if (hasValidClasses) {
-    console.log("👍 Code contains Px valid classes", codeBlock)
-
-    return sendOscMessage({
-      address: "/px",
-      args: [codeBlock],
-    })
-  }
-  console.log("😬 Code does not contain Px valid classes")
-}
-
 type Message = {
   address: string
   args?: string[]
@@ -51,14 +35,22 @@ export const useOscMessages = () => {
     return () => osc.close()
   }, [])
 
-  const handleMusicContent = (content: string) => {
-    const codeRegex = /```([\s\S]+?)```/g
-    let match
+  const handleMusicCode = (codeBlock: string): void => {
+    const validClasses = /^\s*(Nfx|Ns|Play|Px|TR08)/
+    const hasValidClasses = validClasses.test(codeBlock)
+    console.log(codeBlock)
 
-    while ((match = codeRegex.exec(content)) !== null) {
-      handleCode(match[1])
+    if (hasValidClasses) {
+      console.log("👍 Code contains Px valid classes", codeBlock)
+
+      return sendOscMessage({
+        address: "/px",
+        args: [codeBlock],
+      })
     }
+
+    console.log("😬 Code does not contain Px valid classes")
   }
 
-  return { sendOscMessage, handleMusicContent }
+  return { sendOscMessage, handleMusicCode }
 }

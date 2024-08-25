@@ -56,7 +56,7 @@ const InputArea = ({
   }, [isLoading])
 
   return (
-    <div className="flex items-center gap-4 p-2 text-xl  bg-primary-bg bg-opacity-80">
+    <div className="flex items-center gap-4 p-2 text-xl bg-primary-bg bg-opacity-80">
       <textarea
         ref={textareaRef}
         value={prompt}

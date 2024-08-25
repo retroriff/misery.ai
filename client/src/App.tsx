@@ -4,9 +4,10 @@ import { useOscMessages } from "./composables/useOscMessages"
 import { AIProvider, useAi } from "~/composables/useAi"
 
 import ChatForm from "./components/ChatForm"
-import Hydra from "./components/HydraAnimation"
+import Animation from "./components/Animation"
 import MessageDisplay from "./components/MessageDisplay"
 import ReevaluateBadge from "./components/ReevaluateBadge"
+import { defaultHydraCode } from "./composables/useHydra"
 
 const initialPrompt: Message = {
   content: "Hello, mere mortal. How can I help you?",
@@ -18,8 +19,14 @@ const provider: AIProvider = "openai"
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
   const [musicConversation, setMusicConversation] = useState<Message[]>([])
-  const { handleMusicContent } = useOscMessages()
-  const [hush, setHush] = useState(false)
+  const [visualConversation, setVisualConversation] = useState<Message[]>([
+    defaultHydraCode,
+    defaultHydraCode,
+    defaultHydraCode,
+    defaultHydraCode,
+    defaultHydraCode,
+  ])
+  const { handleMusicCode } = useOscMessages()
   const [messageIndex, setMessageIndex] = useState(-1)
   const [prompt, setPrompt] = useState("")
   const [showReevaluateBadge, setShowReevaluateBadge] = useState(false)
@@ -30,10 +37,6 @@ const App = () => {
 
     setConversation((prevConversation) => [...prevConversation, userMessage])
 
-    if (userMessage.content === "Hush") {
-      setHush(true)
-    }
-
     const newResponse = await sendPrompt({
       conversation,
       prompt,
@@ -41,19 +44,28 @@ const App = () => {
     })
 
     if (newResponse) {
-      const { musicCode, responseText } = newResponse
+      const { musicCode, responseText, visualCode } = newResponse
 
-      setConversation((prev) => [
-        ...prev,
-        { content: responseText, role: "assistant" },
-      ])
+      if (responseText) {
+        setConversation((prev) => [
+          ...prev,
+          { content: responseText, role: "assistant" },
+        ])
+      }
 
       if (musicCode) {
         setMusicConversation((prev) => [
           ...prev,
           { content: musicCode, role: "assistant" },
         ])
-        handleMusicContent(musicCode)
+        handleMusicCode(musicCode)
+      }
+
+      if (visualCode) {
+        setVisualConversation((prev) => [
+          ...prev,
+          { content: visualCode, role: "assistant" },
+        ])
       }
 
       setError("")
@@ -107,13 +119,11 @@ const App = () => {
     }
   }
 
-  const shouldAnimate = conversation.length > 1 && !hush
-
   return (
-    <main className="flex h-full w-full justify-between p-8 gap-8">
-      <div className="flex-1 h-full flex flex-col">
+    <main className="flex h-full p-8 gap-8">
+      <div className="flex-1 h-full flex flex-col max-w-[33%] 2xl:max-w-screen-sm">
         <div className="h-full flex-grow justify-center overflow-hidden">
-          <div className="conversation flex h-full justify-center overflow-y-auto">
+          <div className="conversation h-full justify-center">
             <MessageDisplay conversation={conversation} responseType="chat" />
           </div>
         </div>
@@ -129,24 +139,31 @@ const App = () => {
             {error && <p className="text-red-500">{error}</p>}
             <ReevaluateBadge
               conversation={conversation}
-              handleMusicContent={handleMusicContent}
+              handleMusicCode={handleMusicCode}
               show={showReevaluateBadge}
             />
           </div>
         </div>
       </div>
       <div className="flex-1 h-full flex flex-col text-red-500">
-        <div className="mt-auto">
+        <div className="conversation mt-auto">
+          <MessageDisplay
+            conversation={visualConversation}
+            responseType="visual"
+          />
+        </div>
+      </div>
+      <div className="flex-1 h-full flex flex-col text-red-500">
+        <div className="conversation mt-auto">
           <MessageDisplay
             conversation={musicConversation}
             responseType="music"
           />
         </div>
       </div>
-      <div className="flex-1 h-full flex flex-col text-red-500">
-        <div className="mt-auto"></div>
-      </div>
-      <Hydra shouldAnimate={shouldAnimate} />
+      <Animation
+        code={visualConversation[visualConversation.length - 1].content}
+      />
     </main>
   )
 }

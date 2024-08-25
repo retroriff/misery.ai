@@ -10,11 +10,9 @@ body,
 
 /* Automatically scroll to the bottom of the conversation */
 .conversation {
-  scrollbar-color: #333 theme("colors.primary-bg");
-
-  @apply flex-wrap;
-  align-content: end;
+  @apply flex flex-wrap content-end overflow-y-auto;
   scroll-snap-type: y proximity;
+  scrollbar-color: #333 theme("colors.primary-bg");
 
   &::after {
     @apply block content-[""];
@@ -32,10 +30,10 @@ body,
   }
 
   pre {
-    @apply !bg-transparent rounded-none !p-0 !block !m-0;
+    @apply !bg-transparent rounded-none !p-0 !block !m-0 !mt-2 !overflow-hidden;
 
     code {
-      @apply !bg-primary-bg !bg-opacity-70 !leading-[3rem] p-2;
+      @apply !bg-primary-bg !bg-opacity-70 !leading-[1.8em] !p-2;
     }
   }
 }
