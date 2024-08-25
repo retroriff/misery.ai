@@ -43,7 +43,7 @@ const RenderContent = ({ content }: RenderContentProps) => {
     })
   }
 
-  return <>{elements}</>
+  return elements
 }
 
 export default RenderContent

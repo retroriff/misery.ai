@@ -5,8 +5,9 @@ interface RenderCodeProps {
 }
 
 const RenderCode = ({ content }: RenderCodeProps) => {
+  const formattedContent = `${content}`.trim()
   const elements: JSX.Element[] = []
-  const lines = content.split("\n")
+  const lines = formattedContent.split("\n")
 
   lines.forEach((line, index) => {
     elements.push(
@@ -14,7 +15,7 @@ const RenderCode = ({ content }: RenderCodeProps) => {
     )
   })
 
-  return <>{elements}</>
+  return elements
 }
 
 export default RenderCode

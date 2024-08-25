@@ -10,7 +10,7 @@ import ReevaluateBadge from "./components/ReevaluateBadge"
 import { defaultHydraCode } from "./composables/useHydra"
 
 const initialPrompt: Message = {
-  content: "Hello, mere mortal. How can I help you?",
+  content: `Hello, mere mortal. How can I help you?\n`,
   role: "assistant",
 }
 
@@ -20,10 +20,6 @@ const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
   const [musicConversation, setMusicConversation] = useState<Message[]>([])
   const [visualConversation, setVisualConversation] = useState<Message[]>([
-    defaultHydraCode,
-    defaultHydraCode,
-    defaultHydraCode,
-    defaultHydraCode,
     defaultHydraCode,
   ])
   const { handleMusicCode } = useOscMessages()
@@ -122,10 +118,8 @@ const App = () => {
   return (
     <main className="flex h-full p-8 gap-8">
       <div className="flex-1 h-full flex flex-col max-w-[33%] 2xl:max-w-screen-sm">
-        <div className="h-full flex-grow justify-center overflow-hidden">
-          <div className="conversation h-full justify-center">
-            <MessageDisplay conversation={conversation} responseType="chat" />
-          </div>
+        <div className="h-full flex-grow overflow-hidden flex flex-col">
+          <MessageDisplay conversation={conversation} responseType="chat" />
         </div>
         <div className="m-auto w-full pt-4">
           <div className="m-auto max-w-4xl">
@@ -145,21 +139,14 @@ const App = () => {
           </div>
         </div>
       </div>
-      <div className="flex-1 h-full flex flex-col text-red-500">
-        <div className="conversation mt-auto">
-          <MessageDisplay
-            conversation={visualConversation}
-            responseType="visual"
-          />
-        </div>
+      <div className="flex-1 h-full flex flex-col">
+        <MessageDisplay
+          conversation={visualConversation}
+          responseType="visual"
+        />
       </div>
-      <div className="flex-1 h-full flex flex-col text-red-500">
-        <div className="conversation mt-auto">
-          <MessageDisplay
-            conversation={musicConversation}
-            responseType="music"
-          />
-        </div>
+      <div className="flex-1 h-full flex flex-col">
+        <MessageDisplay conversation={musicConversation} responseType="music" />
       </div>
       <Animation
         code={visualConversation[visualConversation.length - 1].content}
