@@ -18,8 +18,15 @@ const provider: AIProvider = "openai"
 
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
-  const [musicConversation, setMusicConversation] = useState<Message[]>([])
+  const [musicConversation, setMusicConversation] = useState<Message[]>([
+    defaultHydraCode,
+    defaultHydraCode,
+    defaultHydraCode,
+    defaultHydraCode,
+  ])
   const [visualConversation, setVisualConversation] = useState<Message[]>([
+    defaultHydraCode,
+    defaultHydraCode,
     defaultHydraCode,
   ])
   const { handleMusicCode } = useOscMessages()
@@ -116,7 +123,7 @@ const App = () => {
   }
 
   return (
-    <main className="grid-container h-full p-4 gap-8 max-w-screen-2xl">
+    <main className="grid-container h-full p-4 gap-8 max-w-screen-2xl scrollable">
       <MessageDisplay conversation={conversation} responseType="chat" />
 
       <div id="form">

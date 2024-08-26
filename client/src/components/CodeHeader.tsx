@@ -49,11 +49,11 @@ const CodeHeader = ({
   }, [conversation])
 
   return (
-    responseType !== "chat" &&
     conversation.length > 0 && (
       <h2
         className={`text-xl bg-primary-bg text-white px-4 py-2 rounded-t-lg bg-opacity-70 w-full font-bold capitalize
-    ${isFixed ? "absolute -top-0 z-10" : ""}`}
+    ${isFixed ? "lg:absolute -top-0 z-10" : ""}
+    ${responseType === "chat" ? "lg:hidden" : ""}`}
         ref={headerRef}
       >
         {responseType}

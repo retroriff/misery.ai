@@ -9,63 +9,64 @@ body,
 }
 
 .grid-container {
-  @apply grid grid-cols-3 grid-rows-[1fr_auto] gap-4 items-end;
-
+  @apply grid grid-cols-1 gap-4 items-end;
+  grid-template-rows: auto;
   grid-template-areas:
-    "chat visuals music"
-    "form visuals music";
+    "music"
+    "visuals"
+    "chat"
+    "form";
 
   #chat {
     grid-area: chat;
-    grid-row: 1;
   }
 
   #form {
     grid-area: form;
-    grid-row: 2;
   }
 
   #visuals {
-    @apply relative;
-
     grid-area: visuals;
-    grid-row: 1 / span 2;
   }
 
   #music {
-    @apply relative;
-
     grid-area: music;
-    grid-row: 1 / span 2;
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+      "chat visuals music"
+      "form visuals music";
+
+    #chat {
+      grid-row: 1;
+      position: relative;
+    }
+
+    #form {
+      grid-row: 2;
+    }
+
+    #visuals {
+      grid-row: 1 / span 2;
+      position: relative;
+    }
+
+    #music {
+      grid-row: 1 / span 2;
+      position: relative;
+    }
   }
 }
 
-.conversation {
+.scrollable {
   overflow-x: hidden;
   overscroll-behavior: contain;
   scrollbar-color: #171717b3 transparent;
   scroll-snap-type: y proximity;
 }
-
-/* TODO: Automatically scroll to the bottom of the conversation */
-/* .conversation {
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  scrollbar-color: #333 theme("colors.primary-bg");
-  scroll-snap-type: y proximity;
-
-  @media (prefers-reduced-motion: no-preference) {
-    scroll-behavior: smooth;
-  }
-
-  .conversation-list {
-    @apply flex flex-wrap flex-col justify-end items-end;
-
-    .chat-message:last-child {
-      scroll-snap-align: end;
-    }
-  }
-} */
 
 .has-scroll {
   @apply pr-2;

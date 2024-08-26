@@ -35,7 +35,7 @@ const MessageDisplay = ({
       className={`h-full flex flex-col ${className ?? ""}
     ${responseType !== "chat" ? "relative pt-12" : ""} `}
     >
-      <div className={`conversation mt-auto`} ref={conversationRef}>
+      <div className={`scrollable mt-auto`} ref={conversationRef}>
         <CodeHeader
           conversation={conversation}
           conversationRef={conversationRef.current}
