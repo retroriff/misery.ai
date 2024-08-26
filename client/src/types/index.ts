@@ -17,4 +17,4 @@ export type StructuredResponse = {
   visualCode?: string
 }
 
-export type ColumnType = "Chat" | "Music" | "Visuals"
+export type ColumnType = "chat" | "music" | "visuals"

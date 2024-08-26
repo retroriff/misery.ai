@@ -8,10 +8,9 @@ import Animation from "./components/Animation"
 import MessageDisplay from "./components/MessageDisplay"
 import ReevaluateBadge from "./components/ReevaluateBadge"
 import { defaultHydraCode } from "./composables/useHydra"
-import Column from "./components/Column"
 
 const initialPrompt: Message = {
-  content: `Hello, mere mortal. How can I help you?\n`,
+  content: `Hello, mere mortal. How can I help you?`,
   role: "assistant",
 }
 
@@ -117,39 +116,33 @@ const App = () => {
   }
 
   return (
-    <main className="flex h-full p-4 gap-8 max-w-screen-2xl">
-      <Column>
-        <div className="h-full flex-grow overflow-hidden flex flex-col">
-          <MessageDisplay conversation={conversation} responseType="Chat" />
-        </div>
-        <div className="m-auto w-full pt-4">
-          <div className="m-auto max-w-4xl">
-            <ChatForm
-              isLoading={isLoading}
-              onKeyDown={handleKeyDown}
-              onClick={handleClick}
-              prompt={prompt}
-              setPrompt={setPrompt}
-            />
-            {error && <p className="text-red-500">{error}</p>}
-            <ReevaluateBadge
-              handleMusicCode={handleMusicCode}
-              hideReevaluateBadge={() => setShowReevaluateBadge(false)}
-              musicConversation={musicConversation}
-              showBadge={showReevaluateBadge}
-            />
-          </div>
-        </div>
-      </Column>
-      <Column responseType="Visuals">
-        <MessageDisplay
-          conversation={visualConversation}
-          responseType="Visuals"
+    <main className="grid-container h-full p-4 gap-8 max-w-screen-2xl">
+      <MessageDisplay conversation={conversation} responseType="chat" />
+
+      <div id="form">
+        <ChatForm
+          isLoading={isLoading}
+          onKeyDown={handleKeyDown}
+          onClick={handleClick}
+          prompt={prompt}
+          setPrompt={setPrompt}
         />
-      </Column>
-      <Column responseType="Visuals">
-        <MessageDisplay conversation={musicConversation} responseType="Music" />
-      </Column>
+        {error && <p className="text-red-500">{error}</p>}
+        <ReevaluateBadge
+          handleMusicCode={handleMusicCode}
+          hideReevaluateBadge={() => setShowReevaluateBadge(false)}
+          musicConversation={musicConversation}
+          showBadge={showReevaluateBadge}
+        />
+      </div>
+
+      <MessageDisplay
+        conversation={visualConversation}
+        responseType="visuals"
+      />
+
+      <MessageDisplay conversation={musicConversation} responseType="music" />
+
       <Animation
         code={visualConversation[visualConversation.length - 1].content}
       />

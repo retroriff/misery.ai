@@ -1,0 +1,65 @@
+import { useEffect, useRef, useState } from "react"
+import { ColumnType, Message } from "~/types"
+
+type CodeHeaderProps = {
+  conversationRef?: HTMLDivElement | null
+  conversation: Message[]
+  responseType?: ColumnType
+}
+
+const CodeHeader = ({
+  conversation,
+  conversationRef,
+  responseType,
+}: CodeHeaderProps) => {
+  const headerRef = useRef<HTMLHeadingElement | null>(null)
+  const [isFixed, setIsFixed] = useState(false)
+
+  // Handle has-scroll class
+  useEffect(() => {
+    if (conversationRef) {
+      const hasScroll =
+        conversationRef.scrollHeight > conversationRef.clientHeight
+      conversationRef.classList.toggle("has-scroll", hasScroll)
+    }
+  }, [conversation, conversationRef])
+
+  // Sticky header when scrolls to top
+  useEffect(() => {
+    const headerElement = headerRef.current
+
+    if (headerElement) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.boundingClientRect.top <= 20) {
+            setIsFixed(true)
+          } else {
+            setIsFixed(false)
+          }
+        },
+        { threshold: 0, rootMargin: "0px 0px 0px 0px" }
+      )
+
+      observer.observe(headerElement)
+
+      return () => {
+        observer.unobserve(headerElement)
+      }
+    }
+  }, [conversation])
+
+  return (
+    responseType !== "chat" &&
+    conversation.length > 0 && (
+      <h2
+        className={`text-xl bg-primary-bg text-white px-4 py-2 rounded-t-lg bg-opacity-70 w-full font-bold capitalize
+    ${isFixed ? "absolute -top-0 z-10" : ""}`}
+        ref={headerRef}
+      >
+        {responseType}
+      </h2>
+    )
+  )
+}
+
+export default CodeHeader
