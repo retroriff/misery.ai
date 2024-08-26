@@ -8,6 +8,7 @@ import Animation from "./components/Animation"
 import MessageDisplay from "./components/MessageDisplay"
 import ReevaluateBadge from "./components/ReevaluateBadge"
 import { defaultHydraCode } from "./composables/useHydra"
+import Column from "./components/Column"
 
 const initialPrompt: Message = {
   content: `Hello, mere mortal. How can I help you?\n`,
@@ -116,10 +117,10 @@ const App = () => {
   }
 
   return (
-    <main className="flex h-full p-8 gap-8">
-      <div className="flex-1 h-full flex flex-col max-w-[33%] 2xl:max-w-screen-sm">
+    <main className="flex h-full p-4 gap-8 max-w-screen-2xl">
+      <Column>
         <div className="h-full flex-grow overflow-hidden flex flex-col">
-          <MessageDisplay conversation={conversation} responseType="chat" />
+          <MessageDisplay conversation={conversation} responseType="Chat" />
         </div>
         <div className="m-auto w-full pt-4">
           <div className="m-auto max-w-4xl">
@@ -139,16 +140,16 @@ const App = () => {
             />
           </div>
         </div>
-      </div>
-      <div className="flex-1 h-full flex flex-col">
+      </Column>
+      <Column responseType="Visuals">
         <MessageDisplay
           conversation={visualConversation}
-          responseType="visual"
+          responseType="Visuals"
         />
-      </div>
-      <div className="flex-1 h-full flex flex-col">
-        <MessageDisplay conversation={musicConversation} responseType="music" />
-      </div>
+      </Column>
+      <Column responseType="Visuals">
+        <MessageDisplay conversation={musicConversation} responseType="Music" />
+      </Column>
       <Animation
         code={visualConversation[visualConversation.length - 1].content}
       />

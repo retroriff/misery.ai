@@ -3,7 +3,8 @@ import type { Message, StructuredResponse } from "~/types"
 import { generateGeminiContent } from "./useGemini"
 import { generateOpenAiContent } from "./useOpenAi"
 import { generateOllamaContent } from "./useOllama"
-import content from "~/prompt/orchestra.md?raw"
+import generalPrompt from "~/prompt/general.md?raw"
+import prompt from "~/prompt/orchestra.md?raw"
 
 export type AIProvider = "gemini" | "ollama" | "openai"
 
@@ -14,7 +15,7 @@ type SendPrompt = {
 }
 
 const aiInstructions: Message = {
-  content,
+  content: `${generalPrompt}\n${prompt}`,
   role: "user",
 }
 
