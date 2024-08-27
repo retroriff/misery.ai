@@ -52,8 +52,8 @@ const CodeHeader = ({
     conversation.length > 0 && (
       <h2
         className={`text-xl bg-primary-bg text-white px-4 py-2 rounded-t-lg bg-opacity-70 w-full font-bold capitalize
-    ${isFixed ? "lg:absolute -top-0 z-10" : ""}
-    ${responseType === "chat" ? "lg:hidden" : ""}`}
+          ${responseType === "chat" && !isFixed ? "xl:opacity-0" : ""}
+          ${isFixed ? "lg:absolute lg:-top-0 lg:z-10" : ""}`}
         ref={headerRef}
       >
         {responseType}

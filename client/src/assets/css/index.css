@@ -34,7 +34,28 @@ body,
   }
 
   @media (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto auto;
+    grid-template-areas:
+      "visuals music"
+      "chat music"
+      "form music";
+
+    #chat {
+      position: relative;
+    }
+
+    #visuals {
+      position: relative;
+    }
+
+    #music {
+      position: relative;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: 1fr 33% 33%;
     grid-template-rows: 1fr auto;
     grid-template-areas:
       "chat visuals music"
@@ -42,7 +63,6 @@ body,
 
     #chat {
       grid-row: 1;
-      position: relative;
     }
 
     #form {
@@ -51,12 +71,10 @@ body,
 
     #visuals {
       grid-row: 1 / span 2;
-      position: relative;
     }
 
     #music {
       grid-row: 1 / span 2;
-      position: relative;
     }
   }
 }
@@ -84,7 +102,11 @@ body,
   pre {
     @apply !bg-transparent rounded-none !p-0 !block !m-0 !mt-2 !overflow-hidden;
 
-    code {
+    &:first-of-type {
+      @apply !mt-0;
+    }
+
+    code:not(:empty) {
       @apply !bg-primary-bg !bg-opacity-70 !leading-[1.8em] !p-2;
     }
   }

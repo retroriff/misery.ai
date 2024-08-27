@@ -18,15 +18,8 @@ const provider: AIProvider = "openai"
 
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
-  const [musicConversation, setMusicConversation] = useState<Message[]>([
-    defaultHydraCode,
-    defaultHydraCode,
-    defaultHydraCode,
-    defaultHydraCode,
-  ])
+  const [musicConversation, setMusicConversation] = useState<Message[]>([])
   const [visualConversation, setVisualConversation] = useState<Message[]>([
-    defaultHydraCode,
-    defaultHydraCode,
     defaultHydraCode,
   ])
   const { handleMusicCode } = useOscMessages()

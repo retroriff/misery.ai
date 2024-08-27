@@ -6,13 +6,11 @@ import { useEffect, useRef } from "react"
 import CodeHeader from "./CodeHeader"
 
 type MessageDisplayProps = {
-  className?: string
   conversation: Message[]
   responseType?: ColumnType
 }
 
 const MessageDisplay = ({
-  className,
   conversation,
   responseType,
 }: MessageDisplayProps) => {
@@ -32,8 +30,7 @@ const MessageDisplay = ({
   return (
     <section
       id={responseType}
-      className={`h-full flex flex-col ${className ?? ""}
-    ${responseType !== "chat" ? "relative md:pt-12" : ""} `}
+      className={`h-full flex flex-col overflow-y-auto lg:relative lg:pt-14`}
     >
       <div className={`scrollable mt-auto`} ref={conversationRef}>
         <CodeHeader
@@ -42,13 +39,13 @@ const MessageDisplay = ({
           responseType={responseType}
         />
 
-        <div className="conversation-list flex flex-wrap flex-col">
+        <div className="conversation-list flex flex-wrap flex-col mt-4">
           <div className="prose lg:prose-xl text-white w-full">
             {conversation.map((message, index) => (
               <div className="chat-message flex gap-4 mt-2" key={index}>
                 {responseType === "chat" && (
                   <div
-                    className={`border-primary self-start rounded-full border p-2 mt-[4px] bg-primary-bg bg-opacity-80`}
+                    className={`border-primary self-start rounded-full border p-2 mt-1 bg-primary-bg bg-opacity-80`}
                   >
                     <Icon name={message.role} size="md" />
                   </div>
