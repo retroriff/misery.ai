@@ -123,7 +123,7 @@ const App = () => {
   }
 
   return (
-    <main className="grid-container h-full p-4 gap-8 max-w-screen-2xl scrollable">
+    <main className="grid-container md:h-full p-4 gap-8 max-w-screen-2xl">
       <MessageDisplay conversation={conversation} responseType="chat" />
 
       <div id="form">

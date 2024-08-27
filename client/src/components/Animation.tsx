@@ -25,7 +25,7 @@ function Animation({ code }: AnimationProps) {
   }
 
   return (
-    <canvas className="absolute w-full h-full inset-0 -z-10" ref={canvasRef} />
+    <canvas className="fixed w-full h-full inset-0 -z-10" ref={canvasRef} />
   )
 }
 
