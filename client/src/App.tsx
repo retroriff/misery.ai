@@ -1,18 +1,13 @@
 import { KeyboardEvent, useState } from "react"
 import { ControlKeys, type Message } from "~/types"
+import { AIProvider, initialPrompt, useAi } from "~/composables/useAi"
+import { defaultHydraCode } from "./composables/useHydra"
 import { useOscMessages } from "./composables/useOscMessages"
-import { AIProvider, useAi } from "~/composables/useAi"
 
 import ChatForm from "./components/ChatForm"
 import Animation from "./components/Animation"
 import MessageDisplay from "./components/MessageDisplay"
 import ReevaluateBadge from "./components/ReevaluateBadge"
-import { defaultHydraCode } from "./composables/useHydra"
-
-const initialPrompt: Message = {
-  content: `Hello, mere mortal. How can I help you?`,
-  role: "assistant",
-}
 
 const provider: AIProvider = "openai"
 

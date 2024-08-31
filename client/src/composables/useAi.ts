@@ -8,6 +8,11 @@ import prompt from "~/prompt/orchestra.md?raw"
 
 export type AIProvider = "gemini" | "ollama" | "openai"
 
+export const initialPrompt: Message = {
+  content: `Hello, mere mortal. How can I help you?`,
+  role: "assistant",
+}
+
 type SendPrompt = {
   conversation: Message[]
   prompt: string
