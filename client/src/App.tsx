@@ -1,15 +1,13 @@
 import { KeyboardEvent, useState } from "react"
 import { ControlKeys, type Message } from "~/types"
-import { AIProvider, initialPrompt, useAi } from "~/composables/useAi"
+import { initialPrompt, useAi } from "~/composables/useAi"
 import { defaultHydraCode } from "./composables/useHydra"
-import { useOscMessages } from "./composables/useOscMessages"
+import { useMusicCode } from "./composables/useMusicCode"
 
 import ChatForm from "./components/ChatForm"
 import Animation from "./components/Animation"
 import MessageDisplay from "./components/MessageDisplay"
 import ReevaluateBadge from "./components/ReevaluateBadge"
-
-const provider: AIProvider = "openai"
 
 const App = () => {
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
@@ -17,7 +15,7 @@ const App = () => {
   const [visualConversation, setVisualConversation] = useState<Message[]>([
     defaultHydraCode,
   ])
-  const { handleMusicCode } = useOscMessages()
+  const handleMusicCode = useMusicCode()
   const [messageIndex, setMessageIndex] = useState(-1)
   const [prompt, setPrompt] = useState("")
   const [showReevaluateBadge, setShowReevaluateBadge] = useState(false)
@@ -31,7 +29,6 @@ const App = () => {
     const newResponse = await sendPrompt({
       conversation,
       prompt,
-      provider,
     })
 
     if (newResponse) {
@@ -146,3 +143,6 @@ const App = () => {
 }
 
 export default App
+function useMusic(): { handleMusicCode: any } {
+  throw new Error("Function not implemented.")
+}

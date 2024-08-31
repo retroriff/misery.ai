@@ -1,12 +1,11 @@
+import config from "~/config"
 import { useState } from "react"
-import type { Message, StructuredResponse } from "~/types"
 import { generateGeminiContent } from "./useGemini"
 import { generateOpenAiContent } from "./useOpenAi"
 import { generateOllamaContent } from "./useOllama"
 import generalPrompt from "~/prompt/general.md?raw"
 import prompt from "~/prompt/orchestra.md?raw"
-
-export type AIProvider = "gemini" | "ollama" | "openai"
+import type { AIProvider, Message, StructuredResponse } from "~/types"
 
 export const initialPrompt: Message = {
   content: `Hello, mere mortal. How can I help you?`,
@@ -25,13 +24,13 @@ const aiInstructions: Message = {
 }
 
 export const useAi = () => {
-  const [isLoading, setIsLoading] = useState(false)
+  const { aiProvider } = config
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   const sendPrompt = async ({
     conversation,
     prompt,
-    provider = "openai",
   }: SendPrompt): Promise<StructuredResponse | null> => {
     setIsLoading(true)
     setError("")
@@ -45,7 +44,7 @@ export const useAi = () => {
     try {
       let structuredResponse: StructuredResponse
 
-      switch (provider) {
+      switch (aiProvider) {
         case "gemini":
           structuredResponse = await generateGeminiContent(messages)
           break
