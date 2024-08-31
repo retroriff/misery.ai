@@ -1,4 +1,4 @@
-import { Output, AIProvider } from "./types"
+import { AIProvider, Output } from "./types"
 
 const config = {
   aiProvider: AIProvider.OPENAI,
