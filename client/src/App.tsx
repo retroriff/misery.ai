@@ -143,6 +143,3 @@ const App = () => {
 }
 
 export default App
-function useMusic(): { handleMusicCode: any } {
-  throw new Error("Function not implemented.")
-}
