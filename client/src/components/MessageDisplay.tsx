@@ -1,9 +1,9 @@
 import type { ColumnType, Message } from "~/types"
-import Icon from "./Icon"
 import RenderContent from "./RenderContent"
 import RenderCode from "./RenderCode"
 import { useEffect, useRef } from "react"
 import CodeHeader from "./CodeHeader"
+import Avatar from "./Avatar"
 
 type MessageDisplayProps = {
   conversation: Message[]
@@ -45,9 +45,9 @@ const MessageDisplay = ({
               <div className="chat-message flex gap-4 mt-2" key={index}>
                 {responseType === "chat" && (
                   <div
-                    className={`border-primary self-start rounded-full border p-2 mt-1 bg-primary-bg bg-opacity-80`}
+                    className={`border-primary self-start bg-primary-bg bg-opacity-80`}
                   >
-                    <Icon name={message.role} size="md" />
+                    <Avatar name={message.role} />
                   </div>
                 )}
                 <div className="response w-full">
