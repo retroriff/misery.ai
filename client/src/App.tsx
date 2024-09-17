@@ -1,8 +1,9 @@
+import config from "~/config"
 import { KeyboardEvent, useState } from "react"
 import { ControlKeys, type Message } from "~/types"
 import { initialPrompt, useAi } from "~/composables/useAi"
 import { defaultHydraCode } from "./composables/useHydra"
-import { useMusicCode } from "./composables/useMusicCode"
+import { useOscMessages } from "./composables/useOscMessages"
 
 import ChatForm from "./components/ChatForm"
 import Animation from "./components/Animation"
@@ -15,7 +16,7 @@ const App = () => {
   const [visualConversation, setVisualConversation] = useState<Message[]>([
     defaultHydraCode,
   ])
-  const handleMusicCode = useMusicCode()
+  const { handleMusicCode } = useOscMessages()
   const [messageIndex, setMessageIndex] = useState(-1)
   const [prompt, setPrompt] = useState("")
   const [showReevaluateBadge, setShowReevaluateBadge] = useState(false)
@@ -29,6 +30,7 @@ const App = () => {
     const newResponse = await sendPrompt({
       conversation,
       prompt,
+      provider: config.aiProvider,
     })
 
     if (newResponse) {

@@ -35,7 +35,7 @@ export const useOscMessages = () => {
     return () => osc.close()
   }, [])
 
-  const handleOscMessages = (codeBlock: string): void => {
+  const handleMusicCode = (codeBlock: string): void => {
     const validClasses = /^\s*(Nfx|Ns|Play|Px|TR08)/
     const hasValidClasses = validClasses.test(codeBlock)
     console.log(codeBlock)
@@ -52,5 +52,5 @@ export const useOscMessages = () => {
     console.log("😬 Code does not contain Px valid classes")
   }
 
-  return { handleOscMessages }
+  return { handleMusicCode }
 }

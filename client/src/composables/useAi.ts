@@ -4,11 +4,11 @@ import { generateGeminiContent } from "./useGemini"
 import { generateOpenAiContent } from "./useOpenAi"
 import { generateOllamaContent } from "./useOllama"
 import generalPrompt from "~/prompt/general.md?raw"
-import prompt from "~/prompt/orchestra.md?raw"
+// import prompt from "~/prompt/welcome-to-the-machine.md?raw"
 import type { AIProvider, Message, StructuredResponse } from "~/types"
 
 export const initialPrompt: Message = {
-  content: `Welcome, my son.`,
+  content: config.initialAiMessage,
   role: "assistant",
 }
 
@@ -18,9 +18,14 @@ type SendPrompt = {
   provider?: AIProvider
 }
 
-const aiInstructions: Message = {
-  content: `${generalPrompt}\n${prompt}`,
-  role: "user",
+const getPrompt = async (): Promise<Message> => {
+  const { prompt } = config
+  const sessionPrompt = await import(`../prompt/${prompt}.md?raw`)
+
+  return {
+    content: `${generalPrompt}\n${sessionPrompt.default}`,
+    role: "user",
+  }
 }
 
 export const useAi = () => {
@@ -36,7 +41,7 @@ export const useAi = () => {
     setError("")
 
     const messages: Message[] = [
-      aiInstructions,
+      await getPrompt(),
       ...conversation.map((c) => ({ content: c.content, role: c.role })),
       { content: prompt, role: "user" },
     ]
