@@ -2,12 +2,12 @@ const OSC = require("osc-js")
 
 const config = {
   udpClient: {
-    port: 57120,
     host: "127.0.0.1",
+    port: 57120,
   },
   udpServer: {
-    port: 57121,
     host: "127.0.0.1",
+    port: 57121,
   },
 }
 
@@ -22,7 +22,7 @@ osc.on("/test", (message) => {
 
 // Send an OSC message
 setTimeout(() => {
-  const message = new OSC.Message("/test", 123)
+  const message = new OSC.Message("/px", 123)
   osc.send(message, { host: "127.0.0.1", port: 57121 })
   console.log("Sent OSC message:", message)
 }, 1000)

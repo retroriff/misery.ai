@@ -52,3 +52,11 @@ This command will start the server on port 3000 and the React development server
 ## Hydra Animation
 
 You can edit the animation by focusing on it and clicking or pressing the return key.
+
+## OSC Messages
+
+OSC Messages are sent from the server app to the listener, defined by the `udpClient` object. The connection can be debugged:
+
+```
+node server/test.js
+```
