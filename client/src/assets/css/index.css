@@ -35,17 +35,12 @@ body,
 
   @media (min-width: 1024px) {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr auto auto;
+    grid-template-rows: 1fr auto;
     grid-template-areas:
-      "visuals music"
       "chat music"
       "form music";
 
     #chat {
-      position: relative;
-    }
-
-    #visuals {
       position: relative;
     }
 
@@ -55,11 +50,11 @@ body,
   }
 
   @media (min-width: 1280px) {
-    grid-template-columns: 1fr 33% 33%;
+    grid-template-columns: 1fr 66%;
     grid-template-rows: 1fr auto;
     grid-template-areas:
-      "chat visuals music"
-      "form visuals music";
+      "chat music"
+      "form music";
 
     #chat {
       grid-row: 1;
@@ -67,10 +62,6 @@ body,
 
     #form {
       grid-row: 2;
-    }
-
-    #visuals {
-      grid-row: 1 / span 2;
     }
 
     #music {
@@ -90,24 +81,60 @@ body,
   @apply pr-2;
 }
 
-.response {
-  p {
-    @apply inline-block bg-primary-bg bg-opacity-70 mt-3 mb-0 py-1 px-3;
+p {
+  @apply inline-block bg-primary-bg bg-opacity-70 mt-3 mb-0 py-1 px-3;
 
-    &:first-of-type {
-      @apply mt-0;
+  &:first-of-type {
+    @apply mt-0;
+  }
+}
+
+.hasVisuals {
+  .heading {
+    @apply bg-primary-bg bg-opacity-70 text-white;
+  }
+
+  &.grid-container {
+    @media (min-width: 1024px) {
+      grid-template-rows: 1fr auto auto;
+      grid-template-areas:
+        "visuals music"
+        "chat music"
+        "form music";
+
+      #visuals {
+        position: relative;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      grid-template-columns: 1fr 33% 33%;
+      grid-template-rows: 1fr auto;
+      grid-template-areas:
+        "chat visuals music"
+        "form visuals music";
+
+      #visuals {
+        grid-row: 1 / span 2;
+      }
+
+      #music {
+        grid-row: 1 / span 2;
+      }
     }
   }
 
-  pre {
-    @apply !bg-transparent rounded-none !p-0 !block !m-0 !mt-2 !overflow-hidden;
+  .response {
+    pre {
+      @apply !bg-transparent rounded-none !p-0 !block !m-0 !mt-2 !overflow-hidden;
 
-    &:first-of-type {
-      @apply !mt-0;
-    }
+      &:first-of-type {
+        @apply !mt-0;
+      }
 
-    code:not(:empty) {
-      @apply !bg-primary-bg !bg-opacity-70 !leading-[1.8em] !p-2;
+      code:not(:empty) {
+        @apply !bg-primary-bg !bg-opacity-70 !leading-[1.8em] !p-2;
+      }
     }
   }
 }

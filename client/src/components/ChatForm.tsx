@@ -1,6 +1,7 @@
 import React, { KeyboardEvent, useRef, useEffect } from "react"
 import Button from "./Button"
 import { ControlKeys } from "~/types"
+import config from "~/config"
 
 type ChatFormProps = {
   isLoading: boolean
@@ -56,7 +57,9 @@ const InputArea = ({
   }, [isLoading])
 
   return (
-    <div className="flex items-center gap-4 p-2 text-xl bg-primary-bg bg-opacity-80">
+    <div
+      className={`flex items-center gap-4 p-2 text-xl ${config.enableVisuals ? "bg-primary-bg bg-opacity-80" : "rounded-xl border border-gray-200"}`}
+    >
       <textarea
         ref={textareaRef}
         value={prompt}

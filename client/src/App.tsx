@@ -11,6 +11,7 @@ import MessageDisplay from "./components/MessageDisplay"
 import ReevaluateBadge from "./components/ReevaluateBadge"
 
 const App = () => {
+  const { aiProvider, enableVisuals } = config
   const [conversation, setConversation] = useState<Message[]>([initialPrompt])
   const [musicConversation, setMusicConversation] = useState<Message[]>([])
   const [visualConversation, setVisualConversation] = useState<Message[]>([
@@ -30,7 +31,7 @@ const App = () => {
     const newResponse = await sendPrompt({
       conversation,
       prompt,
-      provider: config.aiProvider,
+      provider: aiProvider,
     })
 
     if (newResponse) {
@@ -110,7 +111,9 @@ const App = () => {
   }
 
   return (
-    <main className="grid-container md:h-full p-4 gap-8 max-w-screen-2xl">
+    <main
+      className={`grid-container md:h-full p-4 gap-8 max-w-screen-2xl${enableVisuals ? " hasVisuals" : ""}`}
+    >
       <MessageDisplay conversation={conversation} responseType="chat" />
 
       <div id="form">
@@ -130,16 +133,20 @@ const App = () => {
         />
       </div>
 
-      <MessageDisplay
-        conversation={visualConversation}
-        responseType="visuals"
-      />
+      {enableVisuals && (
+        <MessageDisplay
+          conversation={visualConversation}
+          responseType="visuals"
+        />
+      )}
 
       <MessageDisplay conversation={musicConversation} responseType="music" />
 
-      <Animation
-        code={visualConversation[visualConversation.length - 1].content}
-      />
+      {enableVisuals && (
+        <Animation
+          code={visualConversation[visualConversation.length - 1].content}
+        />
+      )}
     </main>
   )
 }

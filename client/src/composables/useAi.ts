@@ -4,7 +4,6 @@ import { generateGeminiContent } from "./useGemini"
 import { generateOpenAiContent } from "./useOpenAi"
 import { generateOllamaContent } from "./useOllama"
 import generalPrompt from "~/prompt/general.md?raw"
-// import prompt from "~/prompt/welcome-to-the-machine.md?raw"
 import type { AIProvider, Message, StructuredResponse } from "~/types"
 
 export const initialPrompt: Message = {

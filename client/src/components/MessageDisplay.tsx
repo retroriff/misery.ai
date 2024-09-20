@@ -1,9 +1,9 @@
-import type { ColumnType, Message } from "~/types"
-import RenderContent from "./RenderContent"
-import RenderCode from "./RenderCode"
 import { useEffect, useRef } from "react"
+import ChatAvatar from "./ChatAvatar"
 import CodeHeader from "./CodeHeader"
-import Avatar from "./Avatar"
+import RenderCode from "./RenderCode"
+import RenderContent from "./RenderContent"
+import type { ColumnType, Message } from "~/types"
 
 type MessageDisplayProps = {
   conversation: Message[]
@@ -43,13 +43,7 @@ const MessageDisplay = ({
           <div className="prose lg:prose-xl text-white w-full">
             {conversation.map((message, index) => (
               <div className="chat-message flex gap-4 mt-2" key={index}>
-                {responseType === "chat" && (
-                  <div
-                    className={`border-primary self-start bg-primary-bg bg-opacity-80`}
-                  >
-                    <Avatar name={message.role} />
-                  </div>
-                )}
+                {responseType === "chat" && <ChatAvatar role={message.role} />}
                 <div className="response w-full">
                   <RenderComponent content={message.content} />
                 </div>
