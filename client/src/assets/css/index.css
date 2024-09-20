@@ -81,11 +81,21 @@ body,
   @apply pr-2;
 }
 
-p {
-  @apply inline-block bg-primary-bg bg-opacity-70 mt-3 mb-0 py-1 px-3;
+.response {
+  p {
+    @apply inline-block bg-primary-bg bg-opacity-70 mt-3 mb-0 py-1 px-3;
 
-  &:first-of-type {
-    @apply mt-0;
+    &:first-of-type {
+      @apply mt-0;
+    }
+  }
+
+  pre {
+    @apply !p-0 !bg-transparent;
+  }
+
+  code:not(:empty) {
+    @apply !bg-transparent;
   }
 }
 

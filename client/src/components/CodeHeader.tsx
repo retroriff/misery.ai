@@ -48,6 +48,9 @@ const CodeHeader = ({
     }
   }, [conversation])
 
+  const headingText =
+    responseType === "chat" ? "What did you dream?" : "Pipeline"
+
   return (
     conversation.length > 0 && (
       <h2
@@ -56,7 +59,7 @@ const CodeHeader = ({
           ${isFixed ? "lg:absolute lg:-top-0 lg:z-10" : ""}`}
         ref={headerRef}
       >
-        {responseType}
+        {headingText}
       </h2>
     )
   )
