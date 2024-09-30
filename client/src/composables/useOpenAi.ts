@@ -21,7 +21,7 @@ export const generateOpenAiContent = async (
   messages: Message[]
 ): Promise<StructuredResponse> => {
   const response = await openai.beta.chat.completions.parse({
-    model: "gpt-4o-2024-08-06",
+    model: "gpt-4o",
     messages,
     response_format: zodResponseFormat(aiResponse, "aiResponse"),
   })
