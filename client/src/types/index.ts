@@ -15,7 +15,7 @@ export enum ControlKeys {
 
 export type Message = {
   content: string
-  role: "user" | "assistant"
+  role: "assistant" | "system" | "user"
   structuredResponse?: StructuredResponse
 }
 
